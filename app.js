@@ -47,7 +47,7 @@ function timeAgo(iso){
   return `${h} h temu`;
 }
 
-/* ========= weather (Open-Meteo) ========= */
+/* ========= weather (Open‑Meteo) ========= */
 
 async function loadWeather(){
   const cfg = window.DASH_CONFIG;
@@ -74,7 +74,6 @@ async function loadWeather(){
 }
 
 function weatherCodeToPL(code){
-  // krótka, czytelna mapa; możesz rozbudować
   const map = {
     0:"bezchmurnie",
     1:"głównie pogodnie",
@@ -102,7 +101,6 @@ function weatherCodeToPL(code){
 /* ========= RSS news (proxy CORS) ========= */
 
 async function fetchRssItems(rssUrl, limit=8){
-  // Proxy: allorigins (bez klucza); pobiera XML bez problemów CORS
   const proxied = "https://api.allorigins.win/raw?url=" + encodeURIComponent(rssUrl);
   const res = await fetch(proxied);
   if(!res.ok) throw new Error("RSS fetch failed");
@@ -145,7 +143,6 @@ async function loadNews(){
   const newsSources = cfg.rss.news ?? [];
   const sportSources = cfg.rss.sport ?? [];
 
-  // bierzemy pierwszy feed; możesz tu zsumować kilka
   const news = newsSources[0]?.url ? await fetchRssItems(newsSources[0].url, 10) : [];
   const sport = sportSources[0]?.url ? await fetchRssItems(sportSources[0].url, 10) : [];
 
@@ -156,8 +153,6 @@ async function loadNews(){
 /* ========= FX + metals ========= */
 
 async function nbpRate(code){
-  // NBP Web API: /api/exchangerates/rates/A/{code}/?format=json
-  // :contentReference[oaicite:7]{index=7}
   const url = `https://api.nbp.pl/api/exchangerates/rates/A/${encodeURIComponent(code)}/?format=json`;
   const res = await fetch(url);
   if(!res.ok) throw new Error("NBP FX failed");
@@ -171,8 +166,6 @@ async function nbpRate(code){
 }
 
 async function nbpGold(){
-  // NBP Web API: /api/cenyzlota/last/?format=json
-  // :contentReference[oaicite:8]{index=8}
   const url = "https://api.nbp.pl/api/cenyzlota/last/?format=json";
   const res = await fetch(url);
   if(!res.ok) throw new Error("NBP gold failed");
@@ -182,15 +175,12 @@ async function nbpGold(){
 }
 
 async function stooqLastClose(symbol){
-  // Stooq CSV: https://stooq.com/q/d/?s=xagusd  (dodamy parametry formatowania)
-  // :contentReference[oaicite:9]{index=9}
   const url = `https://stooq.com/q/d/l/?s=${encodeURIComponent(symbol)}&i=d`;
   const proxied = "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
   const res = await fetch(proxied);
   if(!res.ok) throw new Error("Stooq failed");
   const csv = await res.text();
 
-  // CSV: Date,Open,High,Low,Close,Volume
   const lines = csv.trim().split("\n");
   const last = lines[lines.length - 1];
   const parts = last.split(",");
@@ -214,7 +204,6 @@ async function loadFxAndMetals(){
   $("#goldPlnG").textContent = (gold.cena != null) ? Number(gold.cena).toFixed(2) : "—";
   $("#goldDate").textContent = gold.data ? `Data: ${gold.data}` : "—";
 
-  // srebro XAGUSD -> PLN/oz po USD/PLN
   try{
     const xagUsd = await stooqLastClose("xagusd");
     if(xagUsd && usdpln){
@@ -228,7 +217,7 @@ async function loadFxAndMetals(){
   }
 }
 
-/* ========= radio (Radio-Browser) ========= */
+/* ========= radio (Radio‑Browser) ========= */
 
 const audio = $("#audio");
 let currentStationId = null;
@@ -243,8 +232,6 @@ function setAudioUiPlaying(isPlaying){
 }
 
 async function radioBrowserPickServer(){
-  // wg docs: /json/servers na all.api.radio-browser.info
-  // :contentReference[oaicite:10]{index=10}
   const url = "https://all.api.radio-browser.info/json/servers";
   const res = await fetch(url);
   if(!res.ok) throw new Error("RadioBrowser servers failed");
@@ -254,7 +241,6 @@ async function radioBrowserPickServer(){
 }
 
 async function radioBrowserSearch(serverBase, name, countrycode){
-  // /json/stations/search?name=...&countrycode=PL&hidebroken=true&limit=10
   const url =
     `${serverBase}/json/stations/search` +
     `?name=${encodeURIComponent(name)}` +
@@ -269,7 +255,6 @@ async function radioBrowserSearch(serverBase, name, countrycode){
 function chooseBestStation(results, label){
   if(!Array.isArray(results) || results.length === 0) return null;
 
-  // heurystyka: nazwa podobna + sensowny bitrate + url_resolved
   const normalized = (s)=> safeText(s).toLowerCase();
   const target = normalized(label);
 
@@ -308,7 +293,6 @@ function createStationCard(st){
   btn.className = "play";
   btn.textContent = "▶";
   btn.title = "Graj";
-
   btn.addEventListener("click", () => playStation(st.sid, st.label, st.url));
 
   wrap.appendChild(left);
@@ -332,7 +316,7 @@ async function playStation(sid, label, url){
 
     setNowPlaying(`Gra: ${label}`);
     setAudioUiPlaying(true);
-  } catch (e){
+  } catch {
     setNowPlaying(`Nie udało się odtworzyć: ${label}`);
     setAudioUiPlaying(false);
   }
@@ -365,7 +349,6 @@ async function loadStations(){
 
   const serverBase = await radioBrowserPickServer();
 
-  // przygotuj listę “docelowych” stacji
   const targets = cfg.stations.map((s, idx)=>({
     sid: `st_${idx}`,
     label: s.label,
@@ -386,7 +369,7 @@ async function loadStations(){
         hint = `${safeText(best.codec || "audio")} • ${best.bitrate ? best.bitrate + " kbps" : "?"}`;
       }
     } catch {
-      // zostanie fallback albo brak
+      // fallback
     }
 
     const st = {
@@ -397,7 +380,6 @@ async function loadStations(){
     };
 
     const card = createStationCard(st);
-    // jeśli nie ma URL, dezaktywuj przycisk
     if(!st.url){
       card.querySelector("button.play").disabled = true;
       card.querySelector("button.play").textContent = "—";
@@ -449,10 +431,8 @@ async function main(){
   wireUI();
   loadQuicklinks();
 
-  // odśwież zegar
   setInterval(setClock, 1000);
 
-  // pierwsze ładowanie
   await Promise.allSettled([
     loadWeather(),
     loadNews(),
@@ -460,7 +440,6 @@ async function main(){
     loadStations()
   ]);
 
-  // cykliczne odświeżanie
   setInterval(()=> loadWeather().catch(()=>{}), 10 * 60 * 1000);
   setInterval(()=> loadNews().catch(()=>{}), 20 * 60 * 1000);
   setInterval(()=> loadFxAndMetals().catch(()=>{}), 60 * 60 * 1000);
