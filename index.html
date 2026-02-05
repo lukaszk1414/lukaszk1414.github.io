@@ -4,236 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Start — Dashboard</title>
-
-  <style>
-    :root{
-      --bg1:#0b1220;
-      --bg2:#070b14;
-      --card:#0f1a31cc;
-      --card2:#0f1a314d;
-      --text:#eaf0ff;
-      --muted:#a9b6d8;
-      --stroke:rgba(255,255,255,.10);
-      --shadow: 0 18px 50px rgba(0,0,0,.35);
-      --radius: 18px;
-      --gap: 14px;
-    }
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color: var(--text);
-      background:
-        radial-gradient(1200px 600px at 20% 10%, rgba(99,102,241,.35), transparent 60%),
-        radial-gradient(900px 500px at 80% 20%, rgba(16,185,129,.22), transparent 55%),
-        radial-gradient(900px 650px at 50% 90%, rgba(56,189,248,.18), transparent 55%),
-        linear-gradient(180deg, var(--bg1), var(--bg2));
-      overflow-x:hidden;
-    }
-    .wrap{ max-width: 1200px; margin: 0 auto; padding: 22px 16px 40px; }
-
-    header{
-      display:flex; gap: 14px; align-items: flex-start; justify-content: space-between;
-      margin-bottom: 14px; flex-wrap: wrap;
-    }
-    .brand{ display:flex; gap: 12px; align-items:center; }
-    .logo{
-      width: 42px; height: 42px; border-radius: 14px;
-      background: linear-gradient(135deg, rgba(99,102,241,.95), rgba(16,185,129,.85));
-      box-shadow: var(--shadow);
-    }
-    h1{ font-size: 18px; margin:0; letter-spacing:.2px; }
-    .sub{ margin:0; color: var(--muted); font-size: 13px; }
-
-    .actions{ display:flex; gap: 10px; align-items:center; flex-wrap: wrap; }
-
-    .pill{
-      display:flex; align-items:center; gap: 10px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid var(--stroke);
-      border-radius: 999px;
-      padding: 10px 12px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 10px 30px rgba(0,0,0,.20);
-    }
-    .search{ display:flex; align-items:center; gap: 10px; min-width: min(540px, 90vw); }
-    .search input{ all: unset; flex:1; color: var(--text); font-size: 14px; padding: 2px 0; }
-    .search input::placeholder{ color: rgba(234,240,255,.55); }
-    .select{
-      background: rgba(255,255,255,.07);
-      border: 1px solid var(--stroke);
-      color: var(--text);
-      border-radius: 999px;
-      padding: 8px 10px;
-      font-size: 12px;
-      outline: none;
-    }
-    .btn{
-      appearance:none; border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      border-radius: 12px;
-      padding: 10px 12px;
-      cursor:pointer;
-      font-size: 12px;
-      transition: transform .12s ease, background .12s ease, border-color .12s ease;
-      white-space: nowrap;
-    }
-    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.18); }
-
-    .topbar{
-      display:grid;
-      grid-template-columns: 1.2fr 1fr 1.6fr;
-      gap: var(--gap);
-      margin: 10px 0 14px;
-    }
-    .card{
-      background: linear-gradient(180deg, var(--card), var(--card2));
-      border: 1px solid var(--stroke);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      overflow:hidden;
-      min-height: 0;
-    }
-    .card-inner{ padding: 14px; }
-
-    .kv{ display:flex; align-items: baseline; justify-content: space-between; gap: 10px; }
-    .label{ color: rgba(234,240,255,.85); font-size: 12px; letter-spacing:.2px; opacity:.9; }
-    .value-big{ font-size: 34px; font-weight: 750; letter-spacing:.3px; line-height: 1; }
-    .value-mid{ font-size: 14px; color: var(--muted); margin-top: 6px; }
-    .muted{ color: var(--muted); }
-    .split{ display:flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
-    .chip{
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 12px;
-      color: rgba(234,240,255,.92);
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: var(--gap);
-      margin-top: 14px;
-    }
-    .panel{ background: linear-gradient(180deg, var(--card), var(--card2));
-      border: 1px solid var(--stroke); border-radius: var(--radius);
-      box-shadow: var(--shadow); backdrop-filter: blur(10px); overflow:hidden; min-height: 0;
-    }
-    .panel-head{
-      padding: 14px 14px 10px;
-      display:flex; align-items:flex-end; justify-content: space-between; gap: 10px;
-      border-bottom: 1px solid rgba(255,255,255,.06);
-    }
-    .panel h2{
-      margin:0; font-size: 13px; letter-spacing:.3px;
-      color: rgba(234,240,255,.92); text-transform: uppercase;
-    }
-    .panel small{ color: var(--muted); }
-    .tiles{ padding: 12px; display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-    .tile{
-      display:flex; gap: 12px; align-items:center;
-      padding: 12px 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.05);
-      text-decoration:none;
-      color: var(--text);
-      transition: transform .12s ease, background .12s ease, border-color .12s ease;
-      min-height: 64px;
-    }
-    .tile:hover{ transform: translateY(-2px); background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.14); }
-    .ico{
-      width: 34px; height: 34px; border-radius: 12px;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.10);
-      display:grid; place-items:center; flex: 0 0 auto; overflow:hidden;
-    }
-    .ico img{ width: 18px; height: 18px; }
-    .meta{ min-width:0; }
-    .meta .name{ font-weight: 650; font-size: 14px; line-height: 1.2; white-space: nowrap; overflow:hidden; text-overflow: ellipsis; }
-    .meta .desc{ margin-top: 3px; font-size: 12px; color: var(--muted); white-space: nowrap; overflow:hidden; text-overflow: ellipsis; }
-
-    .panel.span6{ grid-column: span 6; }
-    .panel.span12{ grid-column: span 12; }
-
-    .news-list{ padding: 12px; display:flex; flex-direction:column; gap: 10px; }
-    .news-item{
-      display:flex; gap: 10px; justify-content: space-between; align-items: flex-start;
-      padding: 10px 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.05);
-      text-decoration:none;
-      color: var(--text);
-      transition: transform .12s ease, background .12s ease, border-color .12s ease;
-    }
-    .news-item:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.14); }
-    .news-title{ font-weight: 650; font-size: 14px; line-height: 1.2; }
-    .news-meta{ color: var(--muted); font-size: 12px; margin-top: 4px; }
-    .news-time{ color: rgba(234,240,255,.65); font-size: 12px; white-space: nowrap; }
-
-    .toast{
-      position: fixed; right: 14px; bottom: 14px;
-      padding: 10px 12px; border-radius: 14px;
-      border: 1px solid var(--stroke);
-      background: rgba(15,26,49,.85);
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow);
-      color: var(--text); font-size: 12px;
-      opacity: 0; transform: translateY(8px);
-      transition: opacity .2s ease, transform .2s ease;
-      pointer-events:none;
-    }
-    .toast.show{ opacity: 1; transform: translateY(0); }
-
-    /* modal edycji */
-    .modal{ position: fixed; inset: 0; display:none; place-items:center; background: rgba(0,0,0,.55); padding: 16px; }
-    .modal.show{ display:grid; }
-    .editor-card{
-      width: min(820px, 96vw);
-      border-radius: 20px; border: 1px solid var(--stroke);
-      background: rgba(15,26,49,.92);
-      backdrop-filter: blur(12px); box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .editor-head{
-      padding: 14px 14px;
-      display:flex; justify-content:space-between; align-items:center;
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      gap: 10px; flex-wrap: wrap;
-    }
-    .editor-head strong{ font-size: 14px; }
-    .editor-body{ padding: 14px; }
-    textarea{
-      width: 100%; min-height: 340px; resize: vertical;
-      border-radius: 14px; border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      padding: 12px;
-      outline: none;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      font-size: 12px; line-height: 1.4;
-    }
-    .hint{ color: var(--muted); font-size: 12px; margin-top: 10px; }
-    .kbd{
-      display:inline-block; padding: 2px 8px;
-      border-radius: 999px; border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      font-size: 11px; color: rgba(234,240,255,.92);
-    }
-
-    @media (max-width: 1000px){
-      .topbar{ grid-template-columns: 1fr; }
-      .panel.span6{ grid-column: span 12; }
-      .search{ min-width: min(720px, 92vw); }
-      .tiles{ grid-template-columns: 1fr; }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
@@ -243,13 +14,16 @@
         <div class="logo" aria-hidden="true"></div>
         <div>
           <h1>Start</h1>
-          <p class="sub">Zegar • pogoda • newsy • skróty. <span class="kbd">/</span> wyszukiwanie • <span class="kbd">E</span> edycja</p>
+          <p class="sub">
+            Zegar • pogoda • newsy • radio • skróty.
+            <span class="kbd">/</span> wyszukiwanie • <span class="kbd">E</span> edycja
+          </p>
         </div>
       </div>
 
       <div class="actions">
         <div class="pill search" role="search">
-          <span style="opacity:.7">🔎</span>
+          <span class="icon">🔎</span>
           <input id="q" placeholder="Szukaj…" autocomplete="off" />
           <select id="engine" class="select" title="Silnik">
             <option value="ddg">DuckDuckGo</option>
@@ -258,11 +32,12 @@
           </select>
           <button class="btn" id="go">Szukaj</button>
         </div>
-        <button class="btn" id="editBtn">Edytuj kafelki</button>
+
+        <button class="btn" id="editBtn">Edytuj linki</button>
       </div>
     </header>
 
-    <!-- ZEGAR / DATA / POGODA -->
+    <!-- TOP: clock / weather / news -->
     <section class="topbar">
       <div class="card">
         <div class="card-inner">
@@ -272,7 +47,7 @@
               <div class="value-big" id="clock">--:--</div>
               <div class="value-mid" id="dateLine">--</div>
             </div>
-            <div class="muted" style="text-align:right">
+            <div class="right">
               <div class="label">Strefa</div>
               <div class="value-mid">Europe/Warsaw</div>
             </div>
@@ -292,7 +67,7 @@
               <div class="value-big" id="tempNow">--°</div>
               <div class="value-mid" id="weatherLine">Ładowanie…</div>
             </div>
-            <div class="muted" style="text-align:right">
+            <div class="right">
               <div class="label">Lokalizacja</div>
               <div class="value-mid" id="locLine">--</div>
             </div>
@@ -309,9 +84,9 @@
           <div class="kv">
             <div>
               <div class="label">Newsy</div>
-              <div class="value-mid" id="newsLine">Ładowanie nagłówków…</div>
+              <div class="value-mid" id="newsLine">Ładowanie…</div>
             </div>
-            <div class="muted" style="text-align:right">
+            <div class="right">
               <button class="btn" id="refreshNews">Odśwież</button>
             </div>
           </div>
@@ -323,9 +98,10 @@
       </div>
     </section>
 
-    <!-- KAFELKI + NEWSY -->
+    <!-- MAIN GRID -->
     <main class="grid">
-      <section class="panel span6" id="tilesPanel">
+      <!-- LINKS -->
+      <section class="panel span6">
         <div class="panel-head">
           <h2>Skróty</h2>
           <small id="tilesCount">—</small>
@@ -333,32 +109,52 @@
         <div class="tiles" id="tiles"></div>
       </section>
 
+      <!-- RADIO -->
       <section class="panel span6">
+        <div class="panel-head">
+          <h2>Radio</h2>
+          <small id="radioStatus">Gotowe</small>
+        </div>
+
+        <div class="panel-body">
+          <div class="radio-controls">
+            <button class="btn" id="radioPlay">Play</button>
+            <button class="btn" id="radioPause">Pause</button>
+            <label class="muted small">Głośność</label>
+            <input id="radioVol" type="range" min="0" max="1" step="0.01" value="0.75" />
+            <span class="muted" id="radioNow">—</span>
+          </div>
+
+          <audio id="audio" preload="none"></audio>
+
+          <div id="radioEmbedWrap" class="radio-embed" style="display:none;">
+            <iframe id="radioEmbed" title="Radio embed" loading="lazy"></iframe>
+          </div>
+
+          <div class="radio-list" id="radioList"></div>
+          <div class="note muted">
+            Tip: najlepsze działanie daje <b>type: "stream"</b> (URL do mp3/aac https). Embed (np. z MyRadioOnline) też działa, ale wygląd zależy od ich playera.
+          </div>
+        </div>
+      </section>
+
+      <!-- NEWS LIST -->
+      <section class="panel span12">
         <div class="panel-head">
           <h2>Najważniejsze dziś</h2>
           <small id="newsCount">—</small>
         </div>
         <div class="news-list" id="news"></div>
       </section>
-
-      <section class="panel span12">
-        <div class="panel-head">
-          <h2>Wskazówka</h2>
-          <small>Jeśli chcesz, dodam kategorie, filtrowanie kafelków i skróty klawiszowe do linków</small>
-        </div>
-        <div class="card-inner muted">
-          To jest “launcher”, a nie iframe-dashboard — wygląda lepiej i działa szybciej. Newsy/pogoda odświeżają się automatycznie (z cache).
-        </div>
-      </section>
     </main>
   </div>
 
-  <!-- modal edycji -->
+  <!-- EDIT MODAL -->
   <div class="modal" id="modal" aria-hidden="true">
     <div class="editor-card">
       <div class="editor-head">
-        <strong>Edytuj kafelki (zapis lokalnie w przeglądarce)</strong>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <strong>Edytuj linki (zapis w tej przeglądarce)</strong>
+        <div class="editor-actions">
           <button class="btn" id="resetBtn">Reset</button>
           <button class="btn" id="saveBtn">Zapisz</button>
           <button class="btn" id="closeBtn">Zamknij ✕</button>
@@ -367,7 +163,7 @@
       <div class="editor-body">
         <textarea id="editor" spellcheck="false"></textarea>
         <div class="hint">
-          Format JSON: lista obiektów <span class="kbd">name</span>, <span class="kbd">url</span>, opcjonalnie <span class="kbd">desc</span>.
+          Format JSON: lista obiektów: <span class="kbd">name</span>, <span class="kbd">url</span>, opcjonalnie <span class="kbd">desc</span>.
         </div>
       </div>
     </div>
@@ -375,320 +171,6 @@
 
   <div class="toast" id="toast">Zapisano ✅</div>
 
-  <script>
-    // ==========================
-    // KONFIG — zmień pod siebie
-    // ==========================
-    const LOCATION = "Warszawa"; // <- zmień np. "Kraków", "Gdańsk", "Wrocław"
-    const NEWS_QUERY = "Polska"; // <- temat do Google News (RSS)
-    const NEWS_LIMIT = 8;
-
-    const STORAGE_KEY = "startpage.links.v2";
-    const CACHE = {
-      weatherKey: "startpage.weather.cache.v1",
-      newsKey: "startpage.news.cache.v1"
-    };
-
-    const DEFAULT_LINKS = [
-      { name: "Gmail", url: "https://mail.google.com/", desc: "Poczta" },
-      { name: "Kalendarz", url: "https://calendar.google.com/", desc: "Plan dnia" },
-      { name: "Drive", url: "https://drive.google.com/", desc: "Pliki" },
-      { name: "ChatGPT", url: "https://chatgpt.com/", desc: "Asystent" },
-      { name: "GitHub", url: "https://github.com/", desc: "Repozytoria" },
-      { name: "Notion", url: "https://www.notion.so/", desc: "Notatki" },
-      { name: "Maps", url: "https://www.google.com/maps", desc: "Mapy" },
-      { name: "Translate", url: "https://translate.google.com/", desc: "Tłumacz" }
-    ];
-
-    // ==========================
-    // Utils
-    // ==========================
-    function esc(s){
-      return String(s || "").replace(/[&<>"']/g, m => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-      }[m]));
-    }
-    function favicon(url){
-      try{
-        const u = new URL(url);
-        return `https://www.google.com/s2/favicons?sz=64&domain=${u.hostname}`;
-      }catch(e){ return ""; }
-    }
-    function showToast(text){
-      const t = document.getElementById("toast");
-      t.textContent = text;
-      t.classList.add("show");
-      setTimeout(()=>t.classList.remove("show"), 1400);
-    }
-    function setText(id, text){ const el = document.getElementById(id); if(el) el.textContent = text; }
-
-    // ==========================
-    // Clock / date
-    // ==========================
-    const WEEKDAYS = ["Niedziela","Poniedziałek","Wtorek","Środa","Czwartek","Piątek","Sobota"];
-    const MONTHS = ["Styczeń","Luty","Marzec","Kwiecień","Maj","Czerwiec","Lipiec","Sierpień","Wrzesień","Październik","Listopad","Grudzień"];
-
-    function tick(){
-      const d = new Date();
-      const hh = String(d.getHours()).padStart(2,"0");
-      const mm = String(d.getMinutes()).padStart(2,"0");
-      setText("clock", `${hh}:${mm}`);
-
-      const day = d.getDate();
-      const month = d.getMonth();
-      const year = d.getFullYear();
-      setText("dateLine", `${day} ${MONTHS[month]} ${year}`);
-      setText("weekdayChip", WEEKDAYS[d.getDay()]);
-      setText("monthChip", `Miesiąc: ${MONTHS[month]}`);
-    }
-    tick();
-    setInterval(tick, 1000);
-
-    // ==========================
-    // Links tiles (launcher)
-    // ==========================
-    function loadLinks(){
-      try{
-        const raw = localStorage.getItem(STORAGE_KEY);
-        return raw ? JSON.parse(raw) : DEFAULT_LINKS;
-      }catch(e){ return DEFAULT_LINKS; }
-    }
-    function saveLinks(links){
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(links, null, 2));
-    }
-    function renderLinks(){
-      const links = loadLinks();
-      const tiles = document.getElementById("tiles");
-      tiles.innerHTML = links.map(l => `
-        <a class="tile" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">
-          <div class="ico"><img alt="" src="${favicon(l.url)}" loading="lazy"/></div>
-          <div class="meta">
-            <div class="name">${esc(l.name)}</div>
-            <div class="desc">${esc(l.desc || l.url)}</div>
-          </div>
-        </a>
-      `).join("");
-      setText("tilesCount", `${links.length} linków`);
-    }
-    renderLinks();
-
-    // Editor modal
-    const modal = document.getElementById("modal");
-    const editor = document.getElementById("editor");
-    const openEditor = () => {
-      editor.value = JSON.stringify(loadLinks(), null, 2);
-      modal.classList.add("show");
-      modal.setAttribute("aria-hidden","false");
-    };
-    const closeEditor = () => {
-      modal.classList.remove("show");
-      modal.setAttribute("aria-hidden","true");
-    };
-    document.getElementById("editBtn").addEventListener("click", openEditor);
-    document.getElementById("closeBtn").addEventListener("click", closeEditor);
-    document.getElementById("saveBtn").addEventListener("click", () => {
-      try{
-        const parsed = JSON.parse(editor.value);
-        if(!Array.isArray(parsed)) throw new Error("root not array");
-        saveLinks(parsed);
-        renderLinks();
-        closeEditor();
-        showToast("Zapisano ✅");
-      }catch(e){
-        alert("Błąd JSON. Upewnij się, że to lista obiektów linków.");
-      }
-    });
-    document.getElementById("resetBtn").addEventListener("click", () => {
-      localStorage.removeItem(STORAGE_KEY);
-      renderLinks();
-      editor.value = JSON.stringify(loadLinks(), null, 2);
-      showToast("Zresetowano 🔄");
-    });
-    modal.addEventListener("click", (e)=> { if(e.target === modal) closeEditor(); });
-
-    // Shortcuts
-    window.addEventListener("keydown", (e)=> {
-      if(e.key === "/" && document.activeElement?.tagName !== "INPUT" && !modal.classList.contains("show")){
-        e.preventDefault(); document.getElementById("q").focus();
-      }
-      if((e.key === "e" || e.key === "E") && !modal.classList.contains("show")) openEditor();
-      if(e.key === "Escape" && modal.classList.contains("show")) closeEditor();
-    });
-
-    // Search
-    function goSearch(){
-      const q = document.getElementById("q").value.trim();
-      if(!q) return;
-      const engine = document.getElementById("engine").value;
-      const encoded = encodeURIComponent(q);
-      const url =
-        engine === "google" ? `https://www.google.com/search?q=${encoded}` :
-        engine === "bing" ? `https://www.bing.com/search?q=${encoded}` :
-        `https://duckduckgo.com/?q=${encoded}`;
-      window.open(url, "_blank", "noopener,noreferrer");
-      document.getElementById("q").value = "";
-    }
-    document.getElementById("go").addEventListener("click", goSearch);
-    document.getElementById("q").addEventListener("keydown", (e)=> { if(e.key === "Enter") goSearch(); });
-
-    // ==========================
-    // Weather (Open-Meteo)
-    // ==========================
-    const WMO = {
-      0:"Bezchmurnie",1:"Przeważnie bezchmurnie",2:"Częściowe zachmurzenie",3:"Pochmurno",
-      45:"Mgła",48:"Mgła osadzająca",
-      51:"Mżawka słaba",53:"Mżawka umiark.",55:"Mżawka silna",
-      61:"Deszcz słaby",63:"Deszcz umiark.",65:"Deszcz silny",
-      71:"Śnieg słaby",73:"Śnieg umiark.",75:"Śnieg silny",
-      80:"Przelotne opady słabe",81:"Przelotne opady umiark.",82:"Przelotne opady silne",
-      95:"Burza",96:"Burza z gradem",99:"Silna burza z gradem"
-    };
-
-    function getCache(key){
-      try{
-        const raw = localStorage.getItem(key);
-        if(!raw) return null;
-        const obj = JSON.parse(raw);
-        if(Date.now() > obj.expires) return null;
-        return obj.data;
-      }catch{ return null; }
-    }
-    function setCache(key, data, ttlMs){
-      localStorage.setItem(key, JSON.stringify({ data, expires: Date.now() + ttlMs }));
-    }
-
-    async function loadWeather(){
-      const cached = getCache(CACHE.weatherKey);
-      if(cached){ renderWeather(cached); return; }
-
-      try{
-        // Geocoding
-        const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(LOCATION)}&count=1&language=pl&format=json`;
-        const geoRes = await fetch(geoUrl);
-        const geo = await geoRes.json();
-        if(!geo?.results?.length) throw new Error("no geo results");
-
-        const { latitude, longitude, name, country, admin1 } = geo.results[0];
-        setText("locLine", `${name}${admin1 ? ", " + admin1 : ""}`);
-
-        // Forecast + current
-        const meteoUrl =
-          `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}` +
-          `&current=temperature_2m,wind_speed_10m,weather_code` +
-          `&daily=temperature_2m_max,temperature_2m_min,weather_code` +
-          `&timezone=Europe%2FWarsaw`;
-
-        const meteoRes = await fetch(meteoUrl);
-        const data = await meteoRes.json();
-
-        setCache(CACHE.weatherKey, { place: {name, country, admin1}, ...data }, 30 * 60 * 1000); // 30 min
-        renderWeather({ place: {name, country, admin1}, ...data });
-      }catch(e){
-        setText("weatherLine", "Nie udało się pobrać pogody.");
-        setText("locLine", LOCATION);
-      }
-    }
-
-    function renderWeather(data){
-      try{
-        const c = data.current;
-        const d = data.daily;
-
-        const temp = Math.round(c.temperature_2m);
-        const wind = Math.round(c.wind_speed_10m);
-
-        const codeNow = c.weather_code;
-        const descNow = WMO[codeNow] || `Kod: ${codeNow}`;
-
-        const min = Math.round(d.temperature_2m_min[0]);
-        const max = Math.round(d.temperature_2m_max[0]);
-
-        setText("tempNow", `${temp}°`);
-        setText("weatherLine", descNow);
-        setText("windChip", `Wiatr: ${wind} km/h`);
-        setText("rangeChip", `Min/Max: ${min}° / ${max}°`);
-      }catch(e){
-        setText("weatherLine", "Brak danych pogodowych.");
-      }
-    }
-
-    loadWeather();
-
-    // ==========================
-    // News (Google News RSS + AllOrigins proxy)
-    // ==========================
-    const NEWS_CACHE_TTL = 20 * 60 * 1000; // 20 min
-
-    async function loadNews(force=false){
-      if(!force){
-        const cached = getCache(CACHE.newsKey);
-        if(cached){ renderNews(cached); return; }
-      }
-
-      setText("newsLine", "Pobieram nagłówki…");
-
-      try{
-        // Google News RSS dla zapytania, PL locale
-        const rss = `https://news.google.com/rss/search?q=${encodeURIComponent(NEWS_QUERY)}&hl=pl&gl=PL&ceid=PL:pl`;
-        // Proxy: AllOrigins (raw)
-        const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(rss)}`;
-
-        const res = await fetch(proxy);
-        const xmlText = await res.text();
-        const items = parseRss(xmlText).slice(0, NEWS_LIMIT);
-
-        const payload = { items, updatedAt: new Date().toISOString(), query: NEWS_QUERY };
-        setCache(CACHE.newsKey, payload, NEWS_CACHE_TTL);
-        renderNews(payload);
-      }catch(e){
-        setText("newsLine", "Nie udało się pobrać newsów.");
-        document.getElementById("news").innerHTML =
-          `<div class="card-inner muted">Błąd pobierania RSS (czasem proxy jest chwilowo niedostępne).</div>`;
-      }
-    }
-
-    function parseRss(xmlText){
-      const doc = new DOMParser().parseFromString(xmlText, "text/xml");
-      const nodes = [...doc.querySelectorAll("item")];
-      return nodes.map(n => {
-        const title = n.querySelector("title")?.textContent?.trim() || "Bez tytułu";
-        const link = n.querySelector("link")?.textContent?.trim() || "#";
-        const pubDate = n.querySelector("pubDate")?.textContent?.trim() || "";
-        const source = n.querySelector("source")?.textContent?.trim() || "Google News";
-        return { title, link, pubDate, source };
-      });
-    }
-
-    function fmtTime(pubDate){
-      if(!pubDate) return "";
-      const d = new Date(pubDate);
-      if(isNaN(d)) return "";
-      return d.toLocaleTimeString("pl-PL", { hour: "2-digit", minute: "2-digit" });
-    }
-
-    function renderNews(payload){
-      const items = payload.items || [];
-      setText("newsLine", items.length ? `Temat: ${payload.query} • ${items.length} nagłówków` : "Brak nagłówków.");
-      setText("newsCount", `${items.length} nagłówków`);
-
-      const upd = new Date(payload.updatedAt);
-      setText("newsUpdatedChip", `Akt.: ${upd.toLocaleTimeString("pl-PL", {hour:"2-digit", minute:"2-digit"})}`);
-
-      const box = document.getElementById("news");
-      box.innerHTML = items.map(it => `
-        <a class="news-item" href="${esc(it.link)}" target="_blank" rel="noopener noreferrer">
-          <div style="min-width:0">
-            <div class="news-title">${esc(it.title)}</div>
-            <div class="news-meta">${esc(it.source || "Źródło")}</div>
-          </div>
-          <div class="news-time">${esc(fmtTime(it.pubDate))}</div>
-        </a>
-      `).join("") || `<div class="card-inner muted">Brak newsów.</div>`;
-    }
-
-    document.getElementById("refreshNews").addEventListener("click", ()=> loadNews(true));
-    loadNews();
-
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
