@@ -3,174 +3,138 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Start — Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Start • Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="color-scheme" content="dark light">
 </head>
-
 <body>
-  <div class="wrap">
-    <header>
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <div>
-          <h1>Start</h1>
-          <p class="sub">
-            Zegar • pogoda • newsy • radio • skróty.
-            <span class="kbd">/</span> wyszukiwanie • <span class="kbd">E</span> edycja
-          </p>
-        </div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="dot"></div>
+      <div>
+        <div class="title">Dashboard</div>
+        <div class="subtitle" id="subtitle">Ładowanie…</div>
       </div>
+    </div>
 
-      <div class="actions">
-        <div class="pill search" role="search">
-          <span class="icon">🔎</span>
-          <input id="q" placeholder="Szukaj…" autocomplete="off" />
-          <select id="engine" class="select" title="Silnik">
-            <option value="ddg">DuckDuckGo</option>
-            <option value="google">Google</option>
-            <option value="bing">Bing</option>
-          </select>
-          <button class="btn" id="go">Szukaj</button>
-        </div>
+    <div class="clock">
+      <div class="time" id="time">--:--</div>
+      <div class="date" id="date">---- -- ----</div>
+    </div>
+  </header>
 
-        <button class="btn" id="editBtn">Edytuj linki</button>
+  <main class="grid">
+    <!-- Pogoda -->
+    <section class="card card-weather">
+      <div class="card-head">
+        <h2>Pogoda</h2>
+        <div class="pill" id="weatherPlace">—</div>
       </div>
-    </header>
-
-    <!-- TOP: clock / weather / news -->
-    <section class="topbar">
-      <div class="card">
-        <div class="card-inner">
-          <div class="kv">
-            <div>
-              <div class="label">Godzina</div>
-              <div class="value-big" id="clock">--:--</div>
-              <div class="value-mid" id="dateLine">--</div>
-            </div>
-            <div class="right">
-              <div class="label">Strefa</div>
-              <div class="value-mid">Europe/Warsaw</div>
-            </div>
-          </div>
-          <div class="split">
-            <span class="chip" id="weekdayChip">--</span>
-            <span class="chip" id="monthChip">--</span>
-          </div>
+      <div class="weather">
+        <div class="weather-main">
+          <div class="temp" id="temp">—°</div>
+          <div class="desc" id="weatherDesc">—</div>
         </div>
-      </div>
-
-      <div class="card">
-        <div class="card-inner">
-          <div class="kv">
-            <div>
-              <div class="label">Pogoda</div>
-              <div class="value-big" id="tempNow">--°</div>
-              <div class="value-mid" id="weatherLine">Ładowanie…</div>
-            </div>
-            <div class="right">
-              <div class="label">Lokalizacja</div>
-              <div class="value-mid" id="locLine">--</div>
-            </div>
-          </div>
-          <div class="split">
-            <span class="chip" id="windChip">Wiatr: --</span>
-            <span class="chip" id="rangeChip">Min/Max: --</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-inner">
-          <div class="kv">
-            <div>
-              <div class="label">Newsy</div>
-              <div class="value-mid" id="newsLine">Ładowanie…</div>
-            </div>
-            <div class="right">
-              <button class="btn" id="refreshNews">Odśwież</button>
-            </div>
-          </div>
-          <div class="split">
-            <span class="chip" id="newsSourceChip">Źródło: Google News (RSS)</span>
-            <span class="chip" id="newsUpdatedChip">Akt.: --</span>
-          </div>
+        <div class="weather-meta">
+          <div class="kv"><span>Odczuwalna</span><strong id="apparent">—</strong></div>
+          <div class="kv"><span>Wiatr</span><strong id="wind">—</strong></div>
+          <div class="kv"><span>Opady</span><strong id="precip">—</strong></div>
+          <div class="kv"><span>Aktualizacja</span><strong id="weatherUpdated">—</strong></div>
         </div>
       </div>
     </section>
 
-    <!-- MAIN GRID -->
-    <main class="grid">
-      <!-- LINKS -->
-      <section class="panel span6">
-        <div class="panel-head">
-          <h2>Skróty</h2>
-          <small id="tilesCount">—</small>
-        </div>
-        <div class="tiles" id="tiles"></div>
-      </section>
-
-      <!-- RADIO -->
-      <section class="panel span6">
-        <div class="panel-head">
-          <h2>Radio</h2>
-          <small id="radioStatus">Gotowe</small>
-        </div>
-
-        <div class="panel-body">
-          <div class="radio-controls">
-            <button class="btn" id="radioPlay">Play</button>
-            <button class="btn" id="radioPause">Pause</button>
-            <label class="muted small">Głośność</label>
-            <input id="radioVol" type="range" min="0" max="1" step="0.01" value="0.75" />
-            <span class="muted" id="radioNow">—</span>
-          </div>
-
-          <audio id="audio" preload="none"></audio>
-
-          <div id="radioEmbedWrap" class="radio-embed" style="display:none;">
-            <iframe id="radioEmbed" title="Radio embed" loading="lazy"></iframe>
-          </div>
-
-          <div class="radio-list" id="radioList"></div>
-          <div class="note muted">
-            Tip: najlepsze działanie daje <b>type: "stream"</b> (URL do mp3/aac https). Embed (np. z MyRadioOnline) też działa, ale wygląd zależy od ich playera.
-          </div>
-        </div>
-      </section>
-
-      <!-- NEWS LIST -->
-      <section class="panel span12">
-        <div class="panel-head">
-          <h2>Najważniejsze dziś</h2>
-          <small id="newsCount">—</small>
-        </div>
-        <div class="news-list" id="news"></div>
-      </section>
-    </main>
-  </div>
-
-  <!-- EDIT MODAL -->
-  <div class="modal" id="modal" aria-hidden="true">
-    <div class="editor-card">
-      <div class="editor-head">
-        <strong>Edytuj linki (zapis w tej przeglądarce)</strong>
-        <div class="editor-actions">
-          <button class="btn" id="resetBtn">Reset</button>
-          <button class="btn" id="saveBtn">Zapisz</button>
-          <button class="btn" id="closeBtn">Zamknij ✕</button>
+    <!-- Newsy -->
+    <section class="card card-news">
+      <div class="card-head">
+        <h2>Newsy</h2>
+        <div class="tabs" role="tablist" aria-label="Newsy">
+          <button class="tab active" data-tab="news">Wiadomości</button>
+          <button class="tab" data-tab="sport">Sport</button>
+          <button class="tab" data-tab="fx">Kursy walut</button>
+          <button class="tab" data-tab="metals">Kruszce</button>
         </div>
       </div>
-      <div class="editor-body">
-        <textarea id="editor" spellcheck="false"></textarea>
-        <div class="hint">
-          Format JSON: lista obiektów: <span class="kbd">name</span>, <span class="kbd">url</span>, opcjonalnie <span class="kbd">desc</span>.
+
+      <div class="tabpanels">
+        <div class="panel active" id="panel-news">
+          <ul class="list" id="listNews"></ul>
+        </div>
+        <div class="panel" id="panel-sport">
+          <ul class="list" id="listSport"></ul>
+        </div>
+        <div class="panel" id="panel-fx">
+          <div class="metrics">
+            <div class="metric">
+              <div class="label">USD/PLN (NBP)</div>
+              <div class="value" id="usdpln">—</div>
+              <div class="hint" id="fxDate">—</div>
+            </div>
+            <div class="metric">
+              <div class="label">EUR/PLN (NBP)</div>
+              <div class="value" id="eurpln">—</div>
+              <div class="hint" id="fxNo">—</div>
+            </div>
+          </div>
+          <div class="smallnote">Źródło: NBP Web API. :contentReference[oaicite:4]{index=4}</div>
+        </div>
+        <div class="panel" id="panel-metals">
+          <div class="metrics">
+            <div class="metric">
+              <div class="label">Złoto (NBP, PLN/g)</div>
+              <div class="value" id="goldPlnG">—</div>
+              <div class="hint" id="goldDate">—</div>
+            </div>
+            <div class="metric">
+              <div class="label">Srebro (XAGUSD → PLN/oz)</div>
+              <div class="value" id="silverPlnOz">—</div>
+              <div class="hint">Stooq + przeliczenie po USD/PLN</div>
+            </div>
+          </div>
+          <div class="smallnote">Źródło: NBP + Stooq. :contentReference[oaicite:5]{index=5}</div>
         </div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <div class="toast" id="toast">Zapisano ✅</div>
+    <!-- Radio -->
+    <section class="card card-radio">
+      <div class="card-head">
+        <h2>Radio</h2>
+        <div class="pill" id="nowPlaying">Nie gra</div>
+      </div>
 
+      <div class="radio-controls">
+        <button class="btn" id="btnStop" title="Stop">⏹ Stop</button>
+        <button class="btn" id="btnToggle" title="Pauza/Wznów" disabled>⏯ Pauza</button>
+        <div class="volume">
+          <label for="vol">Głośność</label>
+          <input id="vol" type="range" min="0" max="1" step="0.01" value="0.7" />
+        </div>
+      </div>
+
+      <div class="stations" id="stations"></div>
+
+      <audio id="audio" preload="none"></audio>
+      <div class="smallnote">
+        Streamy są wyszukiwane przez Radio-Browser API (pole <code>url_resolved</code>) i odpalane w jednym playerze bez przeładowań. :contentReference[oaicite:6]{index=6}
+      </div>
+    </section>
+
+    <!-- Ulubione strony (opcjonalnie) -->
+    <section class="card card-links">
+      <div class="card-head">
+        <h2>Ulubione</h2>
+        <div class="pill">Skróty</div>
+      </div>
+      <div class="quicklinks" id="quicklinks"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Tip: edytuj <code>config.js</code> (lokalizacja, RSS, linki).</span>
+  </footer>
+
+  <script src="config.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
