@@ -356,3 +356,34 @@ body{
     font-size: 36px;
   }
 }
+
+
+/* === TOP layout: Weather | FX | Metals | Radio | Favorites === */
+.card-weather{ grid-column: span 3; }
+.card-fx{ grid-column: span 3; }
+.card-metals{ grid-column: span 3; }
+.card-radio{ grid-column: span 3; }
+.card-links{ grid-column: span 3; }
+.card-news{ grid-column: span 12; }
+
+@media (max-width: 1200px){
+  .card-weather,
+  .card-fx,
+  .card-metals{
+    grid-column: span 4;
+  }
+  .card-radio,
+  .card-links{
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 900px){
+  .card-weather,
+  .card-fx,
+  .card-metals,
+  .card-radio,
+  .card-links{
+    grid-column: span 12;
+  }
+}
