@@ -387,3 +387,40 @@ body{
     grid-column: span 12;
   }
 }
+
+
+/* === Compact FX & Metals (no empty space) === */
+.card-fx .fx-wrap,
+.card-metals .fx-wrap{
+  padding: 12px 14px;
+  gap: 12px;
+}
+
+.card-fx .fx-item,
+.card-metals .fx-item{
+  padding: 12px 10px;
+  border-radius: 14px;
+}
+
+.card-fx .fx-label,
+.card-metals .fx-label{
+  font-size: 12px;
+}
+
+.card-fx .fx-value,
+.card-metals .fx-value{
+  font-size: 26px;
+  line-height: 1.1;
+}
+
+.card-fx .fx-hint,
+.card-metals .fx-hint{
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+/* make cards shrink to content */
+.card-fx,
+.card-metals{
+  align-self: start;
+}
