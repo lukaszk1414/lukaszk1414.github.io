@@ -7,17 +7,12 @@ window.DASH_CONFIG = {
 
   // RSS (czytamy przez proxy, żeby ominąć CORS)
   rss: {
+    // UWAGA: sport jest domyślnie pierwszą zakładką na stronie
     news: [
-      {
-        label: "PL / Świat (Google News)",
-        url: "https://news.google.com/rss?hl=pl&gl=PL&ceid=PL:pl"
-      }
+      { label: "PL / Świat (Google News)", url: "https://news.google.com/rss?hl=pl&gl=PL&ceid=PL:pl" }
     ],
     sport: [
-      {
-        label: "Sport (Google News)",
-        url: "https://news.google.com/rss/search?q=sport&hl=pl&gl=PL&ceid=PL:pl"
-      }
+      { label: "Sport (Google News)", url: "https://news.google.com/rss/search?q=sport&hl=pl&gl=PL&ceid=PL:pl" }
     ]
   },
 
@@ -30,12 +25,45 @@ window.DASH_CONFIG = {
   ],
 
   // Twoja lista stacji
-  stations: [
-    { label: "Eska 2", query: "ESKA2", countrycode: "PL" },
-    { label: "Polskie Radio 1", query: "Polskie Radio Program I", countrycode: "PL" },
-    { label: "Radio dla Ciebie", query: "Radio dla Ciebie", countrycode: "PL" },
-    { label: "Melo radio", query: "Meloradio", countrycode: "PL" },
-    { label: "Polskie Radio Trójka", query: "Polskie Radio Program III", countrycode: "PL" },
-    { label: "Radio 357", query: "Radio 357", countrycode: "PL", fallbackUrl: "https://stream.radio357.pl" }
+    stations: [
+    {
+      label: "Eska 2",
+      query: "ESKA2",
+      countrycode: "PL",
+      // Proxy do streamów eskaGO (działa po https)
+      directUrl: "https://pldm.ml/radio?url=https://www.eskago.pl/radio/eska2-warszawa"
+    },
+    {
+      label: "Polskie Radio 1",
+      query: "Polskie Radio Program I",
+      countrycode: "PL",
+      // HLS (m3u8) – odtwarzane przez hls.js (na stronie)
+      directUrl: "https://stream11.polskieradio.pl/pr1/pr1.sdp/playlist.m3u8"
+    },
+    {
+      label: "Radio dla Ciebie",
+      query: "Radio dla Ciebie",
+      countrycode: "PL"
+    },
+    {
+      label: "Melo radio",
+      query: "Meloradio",
+      countrycode: "PL",
+      // Playlista (.pls) -> rozpakowywana w JS do właściwego URL
+      playlistUrl: "https://hub.radiostream.pl/stream.pls?radio=8800&type=none&app=none&coding=mp3&redirect=true"
+    },
+    {
+      label: "Polskie Radio Trójka",
+      query: "Polskie Radio Program III",
+      countrycode: "PL",
+      // HLS (m3u8) – odtwarzane przez hls.js (na stronie)
+      directUrl: "https://stream13.polskieradio.pl/pr3/pr3.sdp/playlist.m3u8"
+    },
+    {
+      label: "Radio 357",
+      query: "Radio 357",
+      countrycode: "PL",
+      fallbackUrl: "https://stream.radio357.pl"
+    }
   ]
 };

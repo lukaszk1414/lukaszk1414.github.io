@@ -217,10 +217,62 @@ async function loadFxAndMetals(){
   }
 }
 
-/* ========= radio (Radio‑Browser) ========= */
+/* ========= radio (Radio‑Browser / direct streams) ========= */
 
 const audio = $("#audio");
 let currentStationId = null;
+let hls = null;
+
+function destroyHls(){
+  if(hls){
+    try{ hls.destroy(); } catch {}
+    hls = null;
+  }
+}
+
+async function resolvePlaylistToUrl(playlistUrl){
+  // Supports simple .pls and .m3u playlists
+  const res = await fetch(playlistUrl, { cache: "no-store" });
+  if(!res.ok) throw new Error("Playlist fetch failed");
+  const text = await res.text();
+
+  // .pls: File1=...
+  const plsMatch = text.match(/File1\s*=\s*(.+)/i);
+  if(plsMatch) return plsMatch[1].trim();
+
+  // .m3u: first non-comment line
+  const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  const m3uLine = lines.find(l => !l.startsWith("#"));
+  if(m3uLine) return m3uLine;
+
+  throw new Error("Unsupported playlist format");
+}
+
+async function playUrl(label, url){
+  destroyHls();
+
+  if(url.endsWith(".m3u8")){
+    if(window.Hls && window.Hls.isSupported()){
+      hls = new window.Hls({ enableWorker: true });
+      hls.loadSource(url);
+      hls.attachMedia(audio);
+      await new Promise((resolve, reject)=>{
+        const onError = (_event, data)=> reject(data?.details || data?.type || "HLS error");
+        hls.on(window.Hls.Events.MANIFEST_PARSED, ()=> resolve());
+        hls.on(window.Hls.Events.ERROR, onError);
+      });
+      await audio.play();
+      return;
+    }
+    audio.src = url; // native HLS (Safari)
+    await audio.play();
+    return;
+  }
+
+  audio.src = url;
+  await audio.play();
+}
+
 
 function setNowPlaying(text){
   $("#nowPlaying").textContent = text;
@@ -261,9 +313,13 @@ function chooseBestStation(results, label){
   const scored = results.map(r => {
     const name = normalized(r.name);
     let score = 0;
+    const url = safeText(r.url_resolved || r.url || "");
+    const isHttps = url.startsWith("https://");
+    if(!isHttps) score -= 50; else score += 8;
     if(name.includes(target) || target.includes(name)) score += 6;
     if(r.url_resolved) score += 4;
     if((r.bitrate ?? 0) >= 64) score += 2;
+    if((r.bitrate ?? 0) >= 128) score += 1;
     if(r.lastcheckok === 1) score += 2;
     return { r, score };
   }).sort((a,b)=> b.score - a.score);
@@ -311,8 +367,7 @@ async function playStation(sid, label, url){
     currentStationId = sid;
     markActive(sid);
 
-    audio.src = url;
-    await audio.play();
+    await playUrl(label, url);
 
     setNowPlaying(`Gra: ${label}`);
     setAudioUiPlaying(true);
@@ -323,6 +378,7 @@ async function playStation(sid, label, url){
 }
 
 function stopRadio(){
+  destroyHls();
   audio.pause();
   audio.removeAttribute("src");
   audio.load();
@@ -354,17 +410,36 @@ async function loadStations(){
     label: s.label,
     query: s.query,
     countrycode: s.countrycode,
+    directUrl: s.directUrl,
+    playlistUrl: s.playlistUrl,
     fallbackUrl: s.fallbackUrl
   }));
 
   for(const t of targets){
-    let pickedUrl = t.fallbackUrl || null;
-    let hint = t.fallbackUrl ? "fallback (bezpośredni stream)" : "szukanie streamu…";
+    let pickedUrl = null;
+    let hint = "";
+
+    if(t.directUrl){
+      pickedUrl = t.directUrl;
+      hint = "bezpośredni stream";
+    } else if(t.playlistUrl){
+      try{
+        pickedUrl = await resolvePlaylistToUrl(t.playlistUrl);
+        hint = "playlista (.pls/.m3u)";
+      } catch {
+        // ignore
+      }
+    }
+
+    if(!pickedUrl && t.fallbackUrl){
+      pickedUrl = t.fallbackUrl;
+      hint = "fallback (bezpośredni stream)";
+    }
 
     try{
       const results = await radioBrowserSearch(serverBase, t.query, t.countrycode);
       const best = chooseBestStation(results, t.label);
-      if(best?.url_resolved){
+      if(best?.url_resolved && safeText(best.url_resolved).startsWith('https://')){
         pickedUrl = best.url_resolved;
         hint = `${safeText(best.codec || "audio")} • ${best.bitrate ? best.bitrate + " kbps" : "?"}`;
       }

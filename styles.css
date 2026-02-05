@@ -96,10 +96,11 @@ body{
   white-space:nowrap;
 }
 
+/* Layout: góra 3 kafle, dół newsy */
 .card-weather{ grid-column: span 4; }
-.card-news{ grid-column: span 8; }
-.card-radio{ grid-column: span 8; }
+.card-radio{ grid-column: span 4; }
 .card-links{ grid-column: span 4; }
+.card-news{ grid-column: span 12; }
 
 .weather{
   padding: 16px;
@@ -290,9 +291,19 @@ body{
 
 @media (max-width: 1050px){
   .card-weather{ grid-column: span 12; }
-  .card-news{ grid-column: span 12; }
   .card-radio{ grid-column: span 12; }
   .card-links{ grid-column: span 12; }
+  .card-news{ grid-column: span 12; }
   .stations{ grid-template-columns: 1fr; }
   .quicklinks{ grid-template-columns: 1fr; }
+}
+
+
+/* Mini cards under news */
+.grid.mini-grid{ margin-top: 12px; }
+.card-mini{ grid-column: span 6; }
+.card-mini .pad{ padding: 10px 12px 14px; }
+
+@media (max-width: 980px){
+  .card-mini{ grid-column: span 12; }
 }

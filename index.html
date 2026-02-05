@@ -24,7 +24,7 @@
   </header>
 
   <main class="grid">
-    <!-- Pogoda -->
+    <!-- GÓRA: Pogoda -->
     <section class="card card-weather">
       <div class="card-head">
         <h2>Pogoda</h2>
@@ -44,59 +44,7 @@
       </div>
     </section>
 
-    <!-- Newsy -->
-    <section class="card card-news">
-      <div class="card-head">
-        <h2>Newsy</h2>
-        <div class="tabs" role="tablist" aria-label="Newsy">
-          <button class="tab active" data-tab="news">Wiadomości</button>
-          <button class="tab" data-tab="sport">Sport</button>
-          <button class="tab" data-tab="fx">Kursy walut</button>
-          <button class="tab" data-tab="metals">Kruszce</button>
-        </div>
-      </div>
-
-      <div class="tabpanels">
-        <div class="panel active" id="panel-news">
-          <ul class="list" id="listNews"></ul>
-        </div>
-        <div class="panel" id="panel-sport">
-          <ul class="list" id="listSport"></ul>
-        </div>
-        <div class="panel" id="panel-fx">
-          <div class="metrics">
-            <div class="metric">
-              <div class="label">USD/PLN (NBP)</div>
-              <div class="value" id="usdpln">—</div>
-              <div class="hint" id="fxDate">—</div>
-            </div>
-            <div class="metric">
-              <div class="label">EUR/PLN (NBP)</div>
-              <div class="value" id="eurpln">—</div>
-              <div class="hint" id="fxNo">—</div>
-            </div>
-          </div>
-          <div class="smallnote">Źródło: NBP Web API.</div>
-        </div>
-        <div class="panel" id="panel-metals">
-          <div class="metrics">
-            <div class="metric">
-              <div class="label">Złoto (NBP, PLN/g)</div>
-              <div class="value" id="goldPlnG">—</div>
-              <div class="hint" id="goldDate">—</div>
-            </div>
-            <div class="metric">
-              <div class="label">Srebro (XAGUSD → PLN/oz)</div>
-              <div class="value" id="silverPlnOz">—</div>
-              <div class="hint">Stooq + przeliczenie po USD/PLN</div>
-            </div>
-          </div>
-          <div class="smallnote">Źródło: NBP + Stooq.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Radio -->
+    <!-- GÓRA: Radio -->
     <section class="card card-radio">
       <div class="card-head">
         <h2>Radio</h2>
@@ -116,11 +64,11 @@
 
       <audio id="audio" preload="none"></audio>
       <div class="smallnote">
-        Streamy są wyszukiwane przez Radio‑Browser API i odpalane w jednym playerze bez przeładowań.
+        Streamy są wyszukiwane przez Radio-Browser API i odpalane w jednym playerze bez przeładowań.
       </div>
     </section>
 
-    <!-- Ulubione strony -->
+    <!-- GÓRA: Ulubione -->
     <section class="card card-links">
       <div class="card-head">
         <h2>Ulubione</h2>
@@ -128,6 +76,73 @@
       </div>
       <div class="quicklinks" id="quicklinks"></div>
     </section>
+
+    <!-- DÓŁ: Newsy -->
+    <section class="card card-news">
+      <div class="card-head">
+        <h2>Newsy</h2>
+        <div class="tabs" role="tablist" aria-label="Newsy">
+          <button class="tab active" data-tab="sport">Sport</button>
+          <button class="tab" data-tab="news">Wiadomości</button>
+</div>
+      </div>
+
+      <div class="tabpanels">
+        <div class="panel active" id="panel-sport">
+          <ul class="list" id="listSport"></ul>
+        </div>
+
+        <div class="panel" id="panel-news">
+          <ul class="list" id="listNews"></ul>
+        </div>
+</div>
+    
+    <section class="grid mini-grid">
+      <div class="card card-mini" id="card-fx">
+        <div class="card-head">
+          <h2>Kursy walut</h2>
+          <div class="pill">NBP</div>
+        </div>
+        <div class="pad">
+          <div class="metrics">
+            <div class="metric">
+              <div class="label">USD/PLN</div>
+              <div class="value" id="usdpln">—</div>
+              <div class="hint" id="fxDate">—</div>
+            </div>
+            <div class="metric">
+              <div class="label">EUR/PLN</div>
+              <div class="value" id="eurpln">—</div>
+              <div class="hint" id="fxNo">—</div>
+            </div>
+          </div>
+          <div class="smallnote">Źródło: NBP Web API.</div>
+        </div>
+      </div>
+
+      <div class="card card-mini" id="card-metals">
+        <div class="card-head">
+          <h2>Kruszce</h2>
+          <div class="pill">NBP + Stooq</div>
+        </div>
+        <div class="pad">
+          <div class="metrics">
+            <div class="metric">
+              <div class="label">Złoto (PLN/g)</div>
+              <div class="value" id="goldPlnG">—</div>
+              <div class="hint" id="goldDate">—</div>
+            </div>
+            <div class="metric">
+              <div class="label">Srebro (PLN/oz)</div>
+              <div class="value" id="silverPlnOz">—</div>
+              <div class="hint">Stooq + przeliczenie po USD/PLN</div>
+            </div>
+          </div>
+          <div class="smallnote">Źródło: NBP + Stooq.</div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer class="footer">
@@ -135,6 +150,7 @@
   </footer>
 
   <script src="config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script src="app.js"></script>
 </body>
 </html>
