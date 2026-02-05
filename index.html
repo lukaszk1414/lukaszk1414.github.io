@@ -3,96 +3,554 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mój dashboard</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Start — Dashboard</title>
+
+  <style>
+    :root{
+      --bg1:#0b1220;
+      --bg2:#070b14;
+      --card:#0f1a31cc;
+      --card2:#0f1a314d;
+      --text:#eaf0ff;
+      --muted:#a9b6d8;
+      --stroke:rgba(255,255,255,.10);
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --radius: 18px;
+      --gap: 14px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% 10%, rgba(99,102,241,.35), transparent 60%),
+        radial-gradient(900px 500px at 80% 20%, rgba(16,185,129,.22), transparent 55%),
+        radial-gradient(900px 650px at 50% 90%, rgba(56,189,248,.18), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
+
+    .wrap{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 22px 16px 40px;
+    }
+
+    header{
+      display:flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand{
+      display:flex;
+      gap: 12px;
+      align-items:center;
+    }
+    .logo{
+      width: 42px; height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(99,102,241,.95), rgba(16,185,129,.85));
+      box-shadow: var(--shadow);
+    }
+    h1{
+      font-size: 18px;
+      margin:0;
+      letter-spacing:.2px;
+    }
+    .sub{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .actions{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex-wrap: wrap;
+    }
+
+    .pill{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--stroke);
+      border-radius: 999px;
+      padding: 10px 12px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,.20);
+    }
+
+    .search{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: min(540px, 90vw);
+    }
+    .search input{
+      all: unset;
+      flex:1;
+      color: var(--text);
+      font-size: 14px;
+      padding: 2px 0;
+    }
+    .search input::placeholder{ color: rgba(234,240,255,.55); }
+
+    .select{
+      background: rgba(255,255,255,.07);
+      border: 1px solid var(--stroke);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 12px;
+      outline: none;
+    }
+
+    .btn{
+      appearance:none;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor:pointer;
+      font-size: 12px;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.10);
+      border-color: rgba(255,255,255,.18);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+      margin-top: 14px;
+    }
+
+    .panel{
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+      min-height: 0;
+    }
+
+    .panel-head{
+      padding: 14px 14px 10px;
+      display:flex;
+      align-items:flex-end;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
+    .panel h2{
+      margin:0;
+      font-size: 13px;
+      letter-spacing:.3px;
+      color: rgba(234,240,255,.92);
+      text-transform: uppercase;
+    }
+    .panel small{
+      color: var(--muted);
+    }
+
+    .tiles{
+      padding: 12px;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .tile{
+      display:flex;
+      gap: 12px;
+      align-items:center;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.05);
+      text-decoration:none;
+      color: var(--text);
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      min-height: 64px;
+    }
+    .tile:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.08);
+      border-color: rgba(255,255,255,.14);
+    }
+
+    .ico{
+      width: 34px; height: 34px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.10);
+      display:grid;
+      place-items:center;
+      flex: 0 0 auto;
+      overflow:hidden;
+    }
+    .ico img{ width: 18px; height: 18px; }
+    .meta{ min-width:0; }
+    .meta .name{
+      font-weight: 650;
+      font-size: 14px;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    .meta .desc{
+      margin-top: 3px;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+
+    .panel.span6{ grid-column: span 6; }
+    .panel.span4{ grid-column: span 4; }
+    .panel.span8{ grid-column: span 8; }
+    .panel.span12{ grid-column: span 12; }
+
+    @media (max-width: 1000px){
+      .panel.span6,.panel.span4,.panel.span8{ grid-column: span 12; }
+      .search{ min-width: min(720px, 92vw); }
+      .tiles{ grid-template-columns: 1fr; }
+    }
+
+    .toast{
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background: rgba(15,26,49,.85);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      color: var(--text);
+      font-size: 12px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity .2s ease, transform .2s ease;
+      pointer-events:none;
+    }
+    .toast.show{ opacity: 1; transform: translateY(0); }
+
+    /* modal edycji */
+    .modal{
+      position: fixed;
+      inset: 0;
+      display:none;
+      place-items:center;
+      background: rgba(0,0,0,.55);
+      padding: 16px;
+    }
+    .modal.show{ display:grid; }
+    .card{
+      width: min(820px, 96vw);
+      border-radius: 20px;
+      border: 1px solid var(--stroke);
+      background: rgba(15,26,49,.92);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card-head{
+      padding: 14px 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      gap: 10px;
+    }
+    .card-head strong{ font-size: 14px; }
+    .card-body{ padding: 14px; }
+    textarea{
+      width: 100%;
+      min-height: 360px;
+      resize: vertical;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 12px;
+      outline: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .hint{
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 10px;
+    }
+    .kbd{
+      display:inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      font-size: 11px;
+      color: rgba(234,240,255,.92);
+    }
+  </style>
 </head>
+
 <body>
-
-<header class="top">
-  <h1>Mój dashboard</h1>
-  <p>Podgląd w kafelkach + przycisk „Pełny ekran” gdy chcesz wygodnie korzystać.</p>
-</header>
-
-<main class="grid" id="grid"></main>
-
-<div class="modal" id="modal" aria-hidden="true">
-  <div class="modal-bar">
-    <div class="modal-title" id="modalTitle"></div>
-    <div class="modal-actions">
-      <a class="btn" id="modalOpen" target="_blank" rel="noopener noreferrer">Otwórz ↗</a>
-      <button class="btn" id="modalClose" type="button">Zamknij ✕</button>
-    </div>
-  </div>
-  <iframe id="modalFrame" loading="lazy"></iframe>
-</div>
-
-<script>
-  const sites = [
-    { name: "Wikipedia", url: "https://pl.wikipedia.org/" },
-    { name: "Stack Overflow", url: "https://stackoverflow.com/" },
-    { name: "BBC", url: "https://www.bbc.com/" },
-    { name: "Example", url: "https://example.com/" },
-  ];
-
-  const grid = document.getElementById("grid");
-  const modal = document.getElementById("modal");
-  const modalFrame = document.getElementById("modalFrame");
-  const modalTitle = document.getElementById("modalTitle");
-  const modalOpen = document.getElementById("modalOpen");
-  const modalClose = document.getElementById("modalClose");
-
-  grid.innerHTML = sites.map((s, i) => `
-    <section class="tile">
-      <div class="tile-bar">
-        <div class="tile-title" title="${escapeHtml(s.name)}">${escapeHtml(s.name)}</div>
-        <div class="tile-actions">
-          <button class="btn" type="button" onclick="openModal(${i})">Pełny ekran ⛶</button>
-          <a class="btn" href="${s.url}" target="_blank" rel="noopener noreferrer">Otwórz ↗</a>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Start</h1>
+          <p class="sub">Szybki launchpad do Twoich ulubionych miejsc. <span class="kbd">/</span> wyszukiwanie • <span class="kbd">E</span> edycja</p>
         </div>
       </div>
-      <div class="frame-wrap">
-        <iframe
-          loading="lazy"
-          src="${s.url}"
-          referrerpolicy="no-referrer"
-          title="${escapeHtml(s.name)}"
-        ></iframe>
+
+      <div class="actions">
+        <div class="pill search" role="search">
+          <span style="opacity:.7">🔎</span>
+          <input id="q" placeholder="Szukaj…" autocomplete="off" />
+          <select id="engine" class="select" title="Silnik">
+            <option value="ddg">DuckDuckGo</option>
+            <option value="google">Google</option>
+            <option value="bing">Bing</option>
+          </select>
+          <button class="btn" id="go">Szukaj</button>
+        </div>
+        <button class="btn" id="editBtn">Edytuj kafelki</button>
       </div>
-    </section>
-  `).join("");
+    </header>
 
-  window.openModal = function(i){
-    const s = sites[i];
-    modalTitle.textContent = s.name;
-    modalOpen.href = s.url;
-    modalFrame.src = s.url;
-    modal.classList.add("show");
-    modal.setAttribute("aria-hidden","false");
-    document.body.classList.add("no-scroll");
-  }
+    <main class="grid" id="grid"></main>
+  </div>
 
-  function closeModal(){
-    modal.classList.remove("show");
-    modal.setAttribute("aria-hidden","true");
-    // opcjonalnie: czyścimy src, żeby oszczędzić zasoby
-    modalFrame.src = "about:blank";
-    document.body.classList.remove("no-scroll");
-  }
+  <!-- modal edycji -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="card">
+      <div class="card-head">
+        <strong>Edytuj układ (zapisuje się w tej przeglądarce)</strong>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn" id="resetBtn">Reset</button>
+          <button class="btn" id="saveBtn">Zapisz</button>
+          <button class="btn" id="closeBtn">Zamknij ✕</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <textarea id="editor" spellcheck="false"></textarea>
+        <div class="hint">
+          Format to JSON. Każdy panel ma tytuł i listę linków: <span class="kbd">name</span>, <span class="kbd">url</span>, opcjonalnie <span class="kbd">desc</span>.
+        </div>
+      </div>
+    </div>
+  </div>
 
-  modalClose.addEventListener("click", closeModal);
-  modal.addEventListener("click", (e) => {
-    if(e.target === modal) closeModal(); // klik w tło
-  });
-  window.addEventListener("keydown", (e) => {
-    if(e.key === "Escape" && modal.classList.contains("show")) closeModal();
-  });
+  <div class="toast" id="toast">Zapisano ✅</div>
 
-  function escapeHtml(str){
-    return str.replace(/[&<>"']/g, m => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    }[m]));
-  }
-</script>
+  <script>
+    const STORAGE_KEY = "startpage.v1";
 
+    const DEFAULT = [
+      {
+        title: "Praca",
+        span: 6,
+        links: [
+          { name: "Gmail", url: "https://mail.google.com/", desc: "Poczta" },
+          { name: "Google Calendar", url: "https://calendar.google.com/", desc: "Kalendarz" },
+          { name: "Notion", url: "https://www.notion.so/", desc: "Notatki i bazy" },
+          { name: "Slack", url: "https://slack.com/signin", desc: "Komunikacja" }
+        ]
+      },
+      {
+        title: "Narzędzia",
+        span: 6,
+        links: [
+          { name: "GitHub", url: "https://github.com/", desc: "Repozytoria" },
+          { name: "ChatGPT", url: "https://chatgpt.com/", desc: "Asystent" },
+          { name: "Google Drive", url: "https://drive.google.com/", desc: "Pliki" },
+          { name: "Speedtest", url: "https://www.speedtest.net/", desc: "Internet" }
+        ]
+      },
+      {
+        title: "Czytanie",
+        span: 6,
+        links: [
+          { name: "Hacker News", url: "https://news.ycombinator.com/", desc: "Tech news" },
+          { name: "Reddit", url: "https://www.reddit.com/", desc: "Społeczności" },
+          { name: "BBC", url: "https://www.bbc.com/", desc: "Wiadomości" },
+          { name: "Wikipedia", url: "https://pl.wikipedia.org/", desc: "Szybkie sprawdzanie" }
+        ]
+      },
+      {
+        title: "Szybkie",
+        span: 6,
+        links: [
+          { name: "YouTube", url: "https://www.youtube.com/", desc: "Wideo" },
+          { name: "Maps", url: "https://www.google.com/maps", desc: "Mapy" },
+          { name: "Translate", url: "https://translate.google.com/", desc: "Tłumacz" },
+          { name: "Allegro", url: "https://allegro.pl/", desc: "Zakupy" }
+        ]
+      }
+    ];
+
+    function loadConfig(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : DEFAULT;
+      }catch(e){
+        return DEFAULT;
+      }
+    }
+
+    function saveConfig(cfg){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg, null, 2));
+    }
+
+    function favicon(url){
+      // favicon od Google (działa dla większości domen) — prosty trik.
+      // Nie jest idealne, ale wygląda świetnie i jest lekkie.
+      try{
+        const u = new URL(url);
+        return `https://www.google.com/s2/favicons?sz=64&domain=${u.hostname}`;
+      }catch(e){
+        return "";
+      }
+    }
+
+    function esc(s){
+      return String(s || "").replace(/[&<>"']/g, m => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      }[m]));
+    }
+
+    function render(){
+      const cfg = loadConfig();
+      const grid = document.getElementById("grid");
+
+      grid.innerHTML = cfg.map(panel => {
+        const span = panel.span || 6;
+        return `
+          <section class="panel span${span}">
+            <div class="panel-head">
+              <h2>${esc(panel.title)}</h2>
+              <small>${panel.links?.length || 0} linków</small>
+            </div>
+            <div class="tiles">
+              ${(panel.links || []).map(l => `
+                <a class="tile" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">
+                  <div class="ico">
+                    <img alt="" src="${favicon(l.url)}" loading="lazy"/>
+                  </div>
+                  <div class="meta">
+                    <div class="name">${esc(l.name)}</div>
+                    <div class="desc">${esc(l.desc || l.url)}</div>
+                  </div>
+                </a>
+              `).join("")}
+            </div>
+          </section>
+        `;
+      }).join("");
+    }
+
+    // search
+    function goSearch(){
+      const q = document.getElementById("q").value.trim();
+      if(!q) return;
+      const engine = document.getElementById("engine").value;
+      const encoded = encodeURIComponent(q);
+      const url =
+        engine === "google" ? `https://www.google.com/search?q=${encoded}` :
+        engine === "bing" ? `https://www.bing.com/search?q=${encoded}` :
+        `https://duckduckgo.com/?q=${encoded}`;
+      window.open(url, "_blank", "noopener,noreferrer");
+      document.getElementById("q").value = "";
+    }
+
+    // modal edit
+    const modal = document.getElementById("modal");
+    const editor = document.getElementById("editor");
+    const toast = document.getElementById("toast");
+
+    function openEditor(){
+      const cfg = loadConfig();
+      editor.value = JSON.stringify(cfg, null, 2);
+      modal.classList.add("show");
+      modal.setAttribute("aria-hidden","false");
+    }
+    function closeEditor(){
+      modal.classList.remove("show");
+      modal.setAttribute("aria-hidden","true");
+    }
+    function showToast(text){
+      toast.textContent = text;
+      toast.classList.add("show");
+      setTimeout(()=>toast.classList.remove("show"), 1400);
+    }
+
+    document.getElementById("go").addEventListener("click", goSearch);
+    document.getElementById("q").addEventListener("keydown", (e)=> {
+      if(e.key === "Enter") goSearch();
+    });
+
+    document.getElementById("editBtn").addEventListener("click", openEditor);
+    document.getElementById("closeBtn").addEventListener("click", closeEditor);
+
+    document.getElementById("saveBtn").addEventListener("click", ()=> {
+      try{
+        const parsed = JSON.parse(editor.value);
+        saveConfig(parsed);
+        render();
+        closeEditor();
+        showToast("Zapisano ✅");
+      }catch(e){
+        alert("Błąd JSON. Upewnij się, że format jest poprawny.");
+      }
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", ()=> {
+      localStorage.removeItem(STORAGE_KEY);
+      render();
+      editor.value = JSON.stringify(loadConfig(), null, 2);
+      showToast("Zresetowano 🔄");
+    });
+
+    modal.addEventListener("click", (e)=> {
+      if(e.target === modal) closeEditor();
+    });
+
+    // skróty klawiszowe
+    window.addEventListener("keydown", (e)=> {
+      if(e.key === "/" && document.activeElement?.tagName !== "INPUT" && !modal.classList.contains("show")){
+        e.preventDefault();
+        document.getElementById("q").focus();
+      }
+      if((e.key === "e" || e.key === "E") && !modal.classList.contains("show")){
+        openEditor();
+      }
+      if(e.key === "Escape" && modal.classList.contains("show")){
+        closeEditor();
+      }
+    });
+
+    render();
+  </script>
 </body>
 </html>
