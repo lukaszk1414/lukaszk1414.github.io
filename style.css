@@ -1,20 +1,129 @@
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  height: 100vh;
+:root{
+  --gap: 12px;
+  --radius: 14px;
+  --shadow: 0 10px 26px rgba(0,0,0,.10);
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background:#f4f4f6;
+  color:#222;
+}
+
+.no-scroll{ overflow:hidden; }
+
+.top{
+  padding: 14px 16px 10px 16px;
+}
+.top h1{ margin:0 0 6px 0; font-size: 20px; }
+.top p{ margin:0; opacity:.7; }
+
+.grid{
+  display:grid;
+  gap: var(--gap);
+  padding: 0 16px 16px 16px;
+  height: calc(100vh - 88px);
+  /* responsywna siatka: dopasowuje liczbę kolumn do szerokości */
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  align-content: stretch;
+}
+
+.tile{
+  background:#fff;
+  border-radius: var(--radius);
+  overflow:hidden;
+  box-shadow: var(--shadow);
+  display:flex;
+  flex-direction:column;
+  min-height: 0; /* ważne dla iframe */
+}
+
+.tile-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   gap: 10px;
-  padding: 10px;
+  padding: 10px 10px;
+  border-bottom: 1px solid rgba(0,0,0,.06);
 }
 
-.tile {
+.tile-title{
+  font-weight: 650;
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow: ellipsis;
+}
+
+.tile-actions{
+  display:flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.btn{
+  font-size: 12px;
+  padding: 7px 10px;
   border-radius: 10px;
-  overflow: hidden;
-  background: #000;
+  border: 1px solid rgba(0,0,0,.12);
+  background: #fff;
+  text-decoration:none;
+  color:#222;
+  cursor:pointer;
 }
 
-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
+.frame-wrap{
+  flex:1;
+  min-height:0;
+  background:#fff;
+}
+
+/* iframe zawsze dopasowany do okna kafelka */
+iframe{
+  width:100%;
+  height:100%;
+  border:0;
+  display:block;
+  background:#fff;
+}
+
+/* MODAL pełnoekranowy */
+.modal{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  display:none;
+  padding: 18px;
+}
+
+.modal.show{ display:block; }
+
+.modal-bar{
+  height: 50px;
+  background:#fff;
+  border-radius: var(--radius) var(--radius) 0 0;
+  box-shadow: var(--shadow);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 0 10px;
+}
+
+.modal-title{
+  font-weight: 650;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  padding-right: 10px;
+}
+
+.modal-actions{ display:flex; gap:8px; }
+
+#modalFrame{
+  width:100%;
+  height: calc(100vh - 18px - 18px - 50px);
+  border-radius: 0 0 var(--radius) var(--radius);
+  box-shadow: var(--shadow);
 }
