@@ -23,8 +23,8 @@
     </div>
   </header>
 
+  
   <main class="grid">
-    <!-- GÓRA: Pogoda -->
     <section class="card card-weather">
       <div class="card-head">
         <h2>Pogoda</h2>
@@ -43,8 +43,42 @@
         </div>
       </div>
     </section>
-
-    <!-- GÓRA: Radio -->
+    <section class="card card-fx">
+      <div class="card-head">
+        <h2>Kursy walut</h2>
+        <div class="pill">NBP</div>
+      </div>
+      <div class="fx-wrap">
+        <div class="fx-item">
+          <div class="fx-label">USD / PLN</div>
+          <div class="fx-value" id="usdpln">—</div>
+          <div class="fx-hint" id="fxDate">—</div>
+        </div>
+        <div class="fx-item">
+          <div class="fx-label">EUR / PLN</div>
+          <div class="fx-value" id="eurpln">—</div>
+          <div class="fx-hint" id="fxNo">—</div>
+        </div>
+      </div>
+    </section>
+    <section class="card card-metals">
+      <div class="card-head">
+        <h2>Kruszce</h2>
+        <div class="pill">NBP + Stooq</div>
+      </div>
+      <div class="fx-wrap">
+        <div class="fx-item">
+          <div class="fx-label">Złoto (PLN / g)</div>
+          <div class="fx-value" id="goldPlnG">—</div>
+          <div class="fx-hint" id="goldDate">—</div>
+        </div>
+        <div class="fx-item">
+          <div class="fx-label">Srebro (PLN / oz)</div>
+          <div class="fx-value" id="silverPlnOz">—</div>
+          <div class="fx-hint">przeliczenie USD → PLN</div>
+        </div>
+      </div>
+    </section>
     <section class="card card-radio">
       <div class="card-head">
         <h2>Radio</h2>
@@ -67,8 +101,6 @@
         Streamy są wyszukiwane przez Radio-Browser API i odpalane w jednym playerze bez przeładowań.
       </div>
     </section>
-
-    <!-- GÓRA: Ulubione -->
     <section class="card card-links">
       <div class="card-head">
         <h2>Ulubione</h2>
@@ -76,8 +108,6 @@
       </div>
       <div class="quicklinks" id="quicklinks"></div>
     </section>
-
-    <!-- DÓŁ: Newsy -->
     <section class="card card-news">
       <div class="card-head">
         <h2>Newsy</h2>
@@ -116,28 +146,8 @@
         </div>
       </div>
     </section>
-
-    <section class="card card-metals">
-      <div class="card-head">
-        <h2>Kruszce</h2>
-        <div class="pill">NBP + Stooq</div>
-      </div>
-      <div class="fx-wrap">
-        <div class="fx-item">
-          <div class="fx-label">Złoto (PLN / g)</div>
-          <div class="fx-value" id="goldPlnG">—</div>
-          <div class="fx-hint" id="goldDate">—</div>
-        </div>
-        <div class="fx-item">
-          <div class="fx-label">Srebro (PLN / oz)</div>
-          <div class="fx-value" id="silverPlnOz">—</div>
-          <div class="fx-hint">przeliczenie USD → PLN</div>
-        </div>
-      </div>
-    </section>
-    
-
   </main>
+
 
   <footer class="footer">
     <span>Tip: edytuj <code>config.js</code> (lokalizacja, RSS, linki).</span>
