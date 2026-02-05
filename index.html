@@ -1,26 +1,98 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mój dashboard</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <main class="grid">
-    <div class="tile">
-      <iframe src="https://mennica.apart.pl/"></iframe>
+<header class="top">
+  <h1>Mój dashboard</h1>
+  <p>Podgląd w kafelkach + przycisk „Pełny ekran” gdy chcesz wygodnie korzystać.</p>
+</header>
+
+<main class="grid" id="grid"></main>
+
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-bar">
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-actions">
+      <a class="btn" id="modalOpen" target="_blank" rel="noopener noreferrer">Otwórz ↗</a>
+      <button class="btn" id="modalClose" type="button">Zamknij ✕</button>
     </div>
-    <div class="tile">
-      <iframe src="https://www.acmilan.com.pl/"></iframe>
-    </div>
-    <div class="tile">
-      <iframe src="https://example.net"></iframe>
-    </div>
-    <div class="tile">
-      <iframe src="https://example.edu"></iframe>
-    </div>
-  </main>
+  </div>
+  <iframe id="modalFrame" loading="lazy"></iframe>
+</div>
+
+<script>
+  const sites = [
+    { name: "Wikipedia", url: "https://pl.wikipedia.org/" },
+    { name: "Stack Overflow", url: "https://stackoverflow.com/" },
+    { name: "BBC", url: "https://www.bbc.com/" },
+    { name: "Example", url: "https://example.com/" },
+  ];
+
+  const grid = document.getElementById("grid");
+  const modal = document.getElementById("modal");
+  const modalFrame = document.getElementById("modalFrame");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalOpen = document.getElementById("modalOpen");
+  const modalClose = document.getElementById("modalClose");
+
+  grid.innerHTML = sites.map((s, i) => `
+    <section class="tile">
+      <div class="tile-bar">
+        <div class="tile-title" title="${escapeHtml(s.name)}">${escapeHtml(s.name)}</div>
+        <div class="tile-actions">
+          <button class="btn" type="button" onclick="openModal(${i})">Pełny ekran ⛶</button>
+          <a class="btn" href="${s.url}" target="_blank" rel="noopener noreferrer">Otwórz ↗</a>
+        </div>
+      </div>
+      <div class="frame-wrap">
+        <iframe
+          loading="lazy"
+          src="${s.url}"
+          referrerpolicy="no-referrer"
+          title="${escapeHtml(s.name)}"
+        ></iframe>
+      </div>
+    </section>
+  `).join("");
+
+  window.openModal = function(i){
+    const s = sites[i];
+    modalTitle.textContent = s.name;
+    modalOpen.href = s.url;
+    modalFrame.src = s.url;
+    modal.classList.add("show");
+    modal.setAttribute("aria-hidden","false");
+    document.body.classList.add("no-scroll");
+  }
+
+  function closeModal(){
+    modal.classList.remove("show");
+    modal.setAttribute("aria-hidden","true");
+    // opcjonalnie: czyścimy src, żeby oszczędzić zasoby
+    modalFrame.src = "about:blank";
+    document.body.classList.remove("no-scroll");
+  }
+
+  modalClose.addEventListener("click", closeModal);
+  modal.addEventListener("click", (e) => {
+    if(e.target === modal) closeModal(); // klik w tło
+  });
+  window.addEventListener("keydown", (e) => {
+    if(e.key === "Escape" && modal.classList.contains("show")) closeModal();
+  });
+
+  function escapeHtml(str){
+    return str.replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[m]));
+  }
+</script>
 
 </body>
 </html>
