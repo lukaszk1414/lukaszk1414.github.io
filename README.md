@@ -15,3 +15,7 @@ Edytuj `config.js`:
 - `rss.news`, `rss.sport` – RSS
 - `stations` – lista stacji
 - `quicklinks` – skróty
+
+
+## Uwaga o streamach HTTP
+GitHub Pages działa po HTTPS, więc strumienie po samym HTTP są blokowane (mixed content). W config.js część streamów jest puszczona przez HTTPS proxy.

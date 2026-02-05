@@ -97,51 +97,45 @@
         </div>
 </div>
     
-    <section class="grid mini-grid">
-      <div class="card card-mini" id="card-fx">
-        <div class="card-head">
-          <h2>Kursy walut</h2>
-          <div class="pill">NBP</div>
-        </div>
-        <div class="pad">
-          <div class="metrics">
-            <div class="metric">
-              <div class="label">USD/PLN</div>
-              <div class="value" id="usdpln">—</div>
-              <div class="hint" id="fxDate">—</div>
-            </div>
-            <div class="metric">
-              <div class="label">EUR/PLN</div>
-              <div class="value" id="eurpln">—</div>
-              <div class="hint" id="fxNo">—</div>
-            </div>
-          </div>
-          <div class="smallnote">Źródło: NBP Web API.</div>
-        </div>
+    
+    <section class="card card-fx">
+      <div class="card-head">
+        <h2>Kursy walut</h2>
+        <div class="pill">NBP</div>
       </div>
-
-      <div class="card card-mini" id="card-metals">
-        <div class="card-head">
-          <h2>Kruszce</h2>
-          <div class="pill">NBP + Stooq</div>
+      <div class="fx-wrap">
+        <div class="fx-item">
+          <div class="fx-label">USD / PLN</div>
+          <div class="fx-value" id="usdpln">—</div>
+          <div class="fx-hint" id="fxDate">—</div>
         </div>
-        <div class="pad">
-          <div class="metrics">
-            <div class="metric">
-              <div class="label">Złoto (PLN/g)</div>
-              <div class="value" id="goldPlnG">—</div>
-              <div class="hint" id="goldDate">—</div>
-            </div>
-            <div class="metric">
-              <div class="label">Srebro (PLN/oz)</div>
-              <div class="value" id="silverPlnOz">—</div>
-              <div class="hint">Stooq + przeliczenie po USD/PLN</div>
-            </div>
-          </div>
-          <div class="smallnote">Źródło: NBP + Stooq.</div>
+        <div class="fx-item">
+          <div class="fx-label">EUR / PLN</div>
+          <div class="fx-value" id="eurpln">—</div>
+          <div class="fx-hint" id="fxNo">—</div>
         </div>
       </div>
     </section>
+
+    <section class="card card-metals">
+      <div class="card-head">
+        <h2>Kruszce</h2>
+        <div class="pill">NBP + Stooq</div>
+      </div>
+      <div class="fx-wrap">
+        <div class="fx-item">
+          <div class="fx-label">Złoto (PLN / g)</div>
+          <div class="fx-value" id="goldPlnG">—</div>
+          <div class="fx-hint" id="goldDate">—</div>
+        </div>
+        <div class="fx-item">
+          <div class="fx-label">Srebro (PLN / oz)</div>
+          <div class="fx-value" id="silverPlnOz">—</div>
+          <div class="fx-hint">przeliczenie USD → PLN</div>
+        </div>
+      </div>
+    </section>
+    
 
   </main>
 

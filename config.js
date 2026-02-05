@@ -38,12 +38,16 @@ window.DASH_CONFIG = {
       query: "Polskie Radio Program I",
       countrycode: "PL",
       // HLS (m3u8) – odtwarzane przez hls.js (na stronie)
-      directUrl: "https://stream11.polskieradio.pl/pr1/pr1.sdp/playlist.m3u8"
+      directUrl: "https://stream11.polskieradio.pl/pr1/pr1.sdp/playlist.m3u8",
+      // Alternatywa (podany stream HTTP) przez HTTPS proxy
+      fallbackUrl: "https://pldm.ml/radio?url=http://mp3.polskieradio.pl:8950/"
     },
     {
       label: "Radio dla Ciebie",
       query: "Radio dla Ciebie",
-      countrycode: "PL"
+      countrycode: "PL",
+      // Podany działający stream jest po HTTP, więc przez HTTPS proxy (żeby GitHub Pages nie blokował mixed-content)
+      directUrl: "https://pldm.ml/radio?url=http://stream2.nadaje.com:11140/rdc"
     },
     {
       label: "Melo radio",
