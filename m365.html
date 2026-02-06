@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>M365 Dashboard</title>
+  <link rel="stylesheet" href="./m365.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <div class="logo"></div>
+      <div class="brandText">
+        <div class="brandTitle">M365 Admin Dashboard</div>
+        <div class="brandSub" id="todayLine">—</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <input id="q" class="search" placeholder="Szukaj skrótu… (np. entra, exchange, intune)" />
+      <button id="refresh" class="btn">Odśwież</button>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="card kpi">
+      <h2>Teraz</h2>
+      <div class="kpiRow">
+        <div class="kpiItem">
+          <div class="kpiLabel">Godzina</div>
+          <div class="kpiValue" id="clock">--:--</div>
+        </div>
+        <div class="kpiItem">
+          <div class="kpiLabel">Data</div>
+          <div class="kpiValue" id="datePretty">—</div>
+        </div>
+        <div class="kpiItem">
+          <div class="kpiLabel">Pogoda</div>
+          <div class="kpiValue" id="kpiWeather">—</div>
+        </div>
+      </div>
+      <div class="muted" id="lastUpdate">Aktualizacja: —</div>
+    </section>
+
+    <section class="card tile" data-tags="pogoda weather">
+      <div class="cardHead">
+        <h2>Pogoda</h2>
+        <span class="pill" id="weatherCity">—</span>
+      </div>
+      <div class="weather">
+        <div class="temp" id="temp">—°</div>
+        <div class="weatherMeta">
+          <div><span class="muted">Opis:</span> <b id="wDesc">—</b></div>
+          <div><span class="muted">Odczuwalna:</span> <b id="feels">—</b></div>
+          <div><span class="muted">Wiatr:</span> <b id="wind">—</b></div>
+          <div><span class="muted">Opady:</span> <b id="rain">—</b></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card tile wide" data-tags="skroty linki panele m365 azure">
+      <div class="cardHead">
+        <h2>Panele administracyjne</h2>
+        <span class="pill">M365 / Azure</span>
+      </div>
+      <div class="tileGrid" id="tiles"></div>
+    </section>
+  </main>
+
+  <script src="./m365.js"></script>
+</body>
+</html>
