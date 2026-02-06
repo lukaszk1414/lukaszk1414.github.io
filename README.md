@@ -1,21 +1,9 @@
-# Dashboard (GitHub Pages) — układ v2
+# Dashboard (GitHub Pages) — v9
 
 ## Układ
 - Góra: Pogoda • Radio • Ulubione
-- Dół: Newsy (domyślnie zakładka Sport)
+- Góra (drugi rząd): Kursy walut • Kruszce (kompaktowo, bez pustych przestrzeni)
+- Dół: Newsy (domyślnie Sport)
 
-## Jak uruchomić na GitHub Pages
-1. Utwórz repo (np. `dashboard` albo `twojlogin.github.io`).
-2. Wrzuć pliki: `index.html`, `styles.css`, `config.js`, `app.js`, `README.md`.
-3. Settings → Pages → Deploy from a branch → `main` (root).
-
-## Konfiguracja
-Edytuj `config.js`:
-- `placeLabel`, `lat`, `lon` – pogoda
-- `rss.news`, `rss.sport` – RSS
-- `stations` – lista stacji
-- `quicklinks` – skróty
-
-
-## Uwaga o streamach HTTP
-GitHub Pages działa po HTTPS, więc strumienie po samym HTTP są blokowane (mixed content). W config.js część streamów jest puszczona przez HTTPS proxy.
+## Uwaga o HTTP
+GitHub Pages działa po HTTPS — strumienie po HTTP są blokowane (mixed content), więc część linków jest puszczona przez HTTPS proxy w `config.js`.

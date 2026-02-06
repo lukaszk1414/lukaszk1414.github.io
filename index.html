@@ -23,8 +23,8 @@
     </div>
   </header>
 
-  
   <main class="grid">
+    <!-- Rząd 1: Pogoda / Radio / Ulubione -->
     <section class="card card-weather">
       <div class="card-head">
         <h2>Pogoda</h2>
@@ -43,42 +43,7 @@
         </div>
       </div>
     </section>
-    <section class="card card-fx">
-      <div class="card-head">
-        <h2>Kursy walut</h2>
-        <div class="pill">NBP</div>
-      </div>
-      <div class="fx-wrap">
-        <div class="fx-item">
-          <div class="fx-label">USD / PLN</div>
-          <div class="fx-value" id="usdpln">—</div>
-          <div class="fx-hint" id="fxDate">—</div>
-        </div>
-        <div class="fx-item">
-          <div class="fx-label">EUR / PLN</div>
-          <div class="fx-value" id="eurpln">—</div>
-          <div class="fx-hint" id="fxNo">—</div>
-        </div>
-      </div>
-    </section>
-    <section class="card card-metals">
-      <div class="card-head">
-        <h2>Kruszce</h2>
-        <div class="pill">NBP + Stooq</div>
-      </div>
-      <div class="fx-wrap">
-        <div class="fx-item">
-          <div class="fx-label">Złoto (PLN / g)</div>
-          <div class="fx-value" id="goldPlnG">—</div>
-          <div class="fx-hint" id="goldDate">—</div>
-        </div>
-        <div class="fx-item">
-          <div class="fx-label">Srebro (PLN / oz)</div>
-          <div class="fx-value" id="silverPlnOz">—</div>
-          <div class="fx-hint">przeliczenie USD → PLN</div>
-        </div>
-      </div>
-    </section>
+
     <section class="card card-radio">
       <div class="card-head">
         <h2>Radio</h2>
@@ -97,10 +62,9 @@
       <div class="stations" id="stations"></div>
 
       <audio id="audio" preload="none"></audio>
-      <div class="smallnote">
-        Streamy są wyszukiwane przez Radio-Browser API i odpalane w jednym playerze bez przeładowań.
-      </div>
+      <div class="smallnote">Streamy odtwarzane bez przeładowań (HLS/playlisty wspierane).</div>
     </section>
+
     <section class="card card-links">
       <div class="card-head">
         <h2>Ulubione</h2>
@@ -108,13 +72,54 @@
       </div>
       <div class="quicklinks" id="quicklinks"></div>
     </section>
+
+    <!-- Rząd 2: Kursy / Kruszce (kompaktowo, bez pustych przestrzeni) -->
+    <section class="card card-fx">
+      <div class="card-head">
+        <h2>Kursy walut</h2>
+        <div class="pill">NBP</div>
+      </div>
+      <div class="compact-wrap">
+        <div class="compact-item">
+          <div class="compact-label">USD / PLN</div>
+          <div class="compact-value" id="usdpln">—</div>
+          <div class="compact-hint" id="fxDate">—</div>
+        </div>
+        <div class="compact-item">
+          <div class="compact-label">EUR / PLN</div>
+          <div class="compact-value" id="eurpln">—</div>
+          <div class="compact-hint" id="fxNo">—</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card card-metals">
+      <div class="card-head">
+        <h2>Kruszce</h2>
+        <div class="pill">NBP + Stooq</div>
+      </div>
+      <div class="compact-wrap">
+        <div class="compact-item">
+          <div class="compact-label">Złoto (PLN / g)</div>
+          <div class="compact-value" id="goldPlnG">—</div>
+          <div class="compact-hint" id="goldDate">—</div>
+        </div>
+        <div class="compact-item">
+          <div class="compact-label">Srebro (PLN / oz)</div>
+          <div class="compact-value" id="silverPlnOz">—</div>
+          <div class="compact-hint">USD → PLN</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rząd 3: Newsy na dole (domyślnie sport) -->
     <section class="card card-news">
       <div class="card-head">
         <h2>Newsy</h2>
         <div class="tabs" role="tablist" aria-label="Newsy">
           <button class="tab active" data-tab="sport">Sport</button>
           <button class="tab" data-tab="news">Wiadomości</button>
-</div>
+        </div>
       </div>
 
       <div class="tabpanels">
@@ -125,32 +130,12 @@
         <div class="panel" id="panel-news">
           <ul class="list" id="listNews"></ul>
         </div>
-</div>
-    
-    
-    <section class="card card-fx">
-      <div class="card-head">
-        <h2>Kursy walut</h2>
-        <div class="pill">NBP</div>
-      </div>
-      <div class="fx-wrap">
-        <div class="fx-item">
-          <div class="fx-label">USD / PLN</div>
-          <div class="fx-value" id="usdpln">—</div>
-          <div class="fx-hint" id="fxDate">—</div>
-        </div>
-        <div class="fx-item">
-          <div class="fx-label">EUR / PLN</div>
-          <div class="fx-value" id="eurpln">—</div>
-          <div class="fx-hint" id="fxNo">—</div>
-        </div>
       </div>
     </section>
   </main>
 
-
   <footer class="footer">
-    <span>Tip: edytuj <code>config.js</code> (lokalizacja, RSS, linki).</span>
+    <span>Tip: edytuj <code>config.js</code> (lokalizacja, RSS, linki, radio).</span>
   </footer>
 
   <script src="config.js"></script>

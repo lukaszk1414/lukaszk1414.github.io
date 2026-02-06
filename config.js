@@ -1,6 +1,6 @@
 // Edytuj to pod siebie
 window.DASH_CONFIG = {
-  placeLabel: "Wyszków",
+  placeLabel: "Warszawa",
   // Warszawa (możesz zmienić na swoje współrzędne)
   lat: 52.2297,
   lon: 21.0122,
