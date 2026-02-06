@@ -4,59 +4,416 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>M365 Admin Dashboard</title>
-  <link rel="stylesheet" href="./m365.css" />
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.04);
+      --text:#e8ecff;
+      --muted:#aab3d6;
+      --border: rgba(255,255,255,.09);
+      --shadow: 0 18px 45px rgba(0,0,0,.35);
+      --radius: 18px;
+      --gap: 14px;
+      --accent:#6ea8ff;
+      --good:#40d39c;
+      --warn:#ffcc66;
+      --bad:#ff6b6b;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font: 14px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1100px 600px at 20% -10%, rgba(110,168,255,.20), transparent 50%),
+        radial-gradient(1000px 700px at 110% 10%, rgba(64,211,156,.14), transparent 55%),
+        var(--bg);
+    }
+    a{color:inherit;text-decoration:none}
+    code{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace}
+    .wrap{max-width:1200px;margin:0 auto;padding:18px 22px 24px}
+    .top{
+      display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+      margin-bottom: 12px;
+    }
+    .brand{
+      display:flex;align-items:center;gap:10px;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+    }
+    .logo{
+      width:12px;height:12px;border-radius:50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 6px rgba(110,168,255,.14);
+    }
+    .brandTitle{font-weight:900;letter-spacing:.2px}
+    .brandSub{color:var(--muted);font-size:12px}
+    .actions{display:flex;gap:10px;align-items:center;flex:1;justify-content:flex-end;min-width:260px}
+    .search{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      border-radius: 999px;
+      padding:10px 12px;
+      color:var(--text);
+      outline:0;
+      min-width: 280px;
+      flex: 1;
+    }
+    .btn{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:999px;
+      cursor:pointer;
+      transition:.15s transform, .15s background;
+      white-space:nowrap;
+    }
+    .btn:hover{transform:translateY(-1px);background: rgba(255,255,255,.06)}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+    }
+    .card{
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      padding: 14px 14px 16px;
+    }
+    .kpi{grid-column: span 12;}
+    .tile{grid-column: span 4; min-height: 210px;}
+    .wide{grid-column: span 8; min-height: 260px;}
+    @media (max-width: 980px){
+      .tile{grid-column: span 6}
+      .wide{grid-column: span 12}
+      .search{min-width: 0}
+    }
+    @media (max-width: 560px){
+      .tile{grid-column: span 12}
+    }
+    .cardHead{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      margin-bottom: 10px;
+    }
+    h2{margin:0;font-size:14px;letter-spacing:.2px;color: var(--muted)}
+    .pill{
+      font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--border);
+      background: rgba(255,255,255,.03); color: rgba(255,255,255,.82);
+      white-space:nowrap;
+    }
+    .muted{color:var(--muted)}
+    .small{font-size:12px}
+    .kpiRow{display:flex;gap:12px;flex-wrap:wrap}
+    .kpiItem{
+      flex: 1 1 180px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+    .kpiLabel{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px}
+    .kpiValue{font-size:20px;font-weight:900;margin-top:4px}
+    .weather{display:flex;gap:12px;align-items:flex-start}
+    .temp{font-size:44px;font-weight:900;min-width: 110px}
+    .weatherMeta{display:grid;gap:6px}
+    .tileGrid{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 560px){ .tileGrid{grid-template-columns:1fr} }
+    .tileLink{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      padding: 12px;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      justify-content:space-between;
+      transition:.15s transform, .15s background, .15s border-color;
+    }
+    .tileLink:hover{transform:translateY(-1px);background: rgba(255,255,255,.05);border-color: rgba(110,168,255,.35)}
+    .tileLink b{display:block}
+    .tileLink span{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+    .tileLink em{font-style:normal;color:rgba(255,255,255,.9);opacity:.9}
+    .icon{
+      width:18px;height:18px;flex:0 0 18px;opacity:.9;margin-top:2px;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,.25));
+    }
+    .tagline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .badge{
+      font-size:12px;padding:3px 8px;border-radius:999px;border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: rgba(255,255,255,.8);
+    }
+    .badge.good{border-color: rgba(64,211,156,.35); color: rgba(64,211,156,.95)}
+    .badge.warn{border-color: rgba(255,204,102,.35); color: rgba(255,204,102,.95)}
+  </style>
 </head>
 <body>
-  <header class="top">
-    <div class="brand">
-      <div class="logo"></div>
-      <div class="brandText">
-        <div class="brandTitle">M365 Admin Dashboard</div>
-        <div class="brandSub" id="todayLine">—</div>
-      </div>
-    </div>
-    <div class="actions">
-      <input id="q" class="search" placeholder="Szukaj skrótu… (np. entra, exchange, intune)" />
-      <button id="refresh" class="btn">Odśwież</button>
-    </div>
-  </header>
-
-  <main class="grid">
-    <section class="card kpi">
-      <h2>Teraz</h2>
-      <div class="kpiRow">
-        <div class="kpiItem"><div class="kpiLabel">Godzina</div><div class="kpiValue" id="clock">--:--</div></div>
-        <div class="kpiItem"><div class="kpiLabel">Data</div><div class="kpiValue" id="datePretty">—</div></div>
-        <div class="kpiItem"><div class="kpiLabel">Pogoda</div><div class="kpiValue" id="kpiWeather">—</div></div>
-      </div>
-      <div class="muted" id="lastUpdate">Aktualizacja: —</div>
-    </section>
-
-    <section class="card tile">
-      <div class="cardHead">
-        <h2>Pogoda</h2>
-        <span class="pill" id="weatherCity">—</span>
-      </div>
-      <div class="weather">
-        <div class="temp" id="temp">—°</div>
-        <div class="weatherMeta">
-          <div><span class="muted">Opis:</span> <b id="wDesc">—</b></div>
-          <div><span class="muted">Odczuwalna:</span> <b id="feels">—</b></div>
-          <div><span class="muted">Wiatr:</span> <b id="wind">—</b></div>
-          <div><span class="muted">Opady:</span> <b id="rain">—</b></div>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <div class="logo"></div>
+        <div class="brandText">
+          <div class="brandTitle">M365 Admin Dashboard</div>
+          <div class="brandSub" id="todayLine">—</div>
         </div>
       </div>
-    </section>
 
-    <section class="card tile wide">
-      <div class="cardHead">
-        <h2>Panele administracyjne</h2>
-        <span class="pill">M365 / Azure</span>
+      <div class="actions">
+        <input id="q" class="search" placeholder="Szukaj skrótu… (entra, exchange, intune, defender)" />
+        <button id="refresh" class="btn">Odśwież</button>
       </div>
-      <div class="tileGrid" id="tiles"></div>
-    </section>
-  </main>
+    </header>
 
-  <script src="./m365.js"></script>
+    <main class="grid">
+      <section class="card kpi">
+        <h2>Teraz</h2>
+        <div class="kpiRow">
+          <div class="kpiItem">
+            <div class="kpiLabel">Godzina</div>
+            <div class="kpiValue" id="clock">--:--</div>
+          </div>
+          <div class="kpiItem">
+            <div class="kpiLabel">Data</div>
+            <div class="kpiValue" id="datePretty">—</div>
+          </div>
+          <div class="kpiItem">
+            <div class="kpiLabel">Pogoda</div>
+            <div class="kpiValue" id="kpiWeather">—</div>
+          </div>
+          <div class="kpiItem">
+            <div class="kpiLabel">Lokalizacja</div>
+            <div class="kpiValue" id="loc">Warszawa</div>
+          </div>
+        </div>
+        <div class="tagline" style="margin-top:10px">
+          <span class="muted" id="lastUpdate">Aktualizacja: —</span>
+          <span class="badge warn" id="hint">Tip: Ctrl+F5 po zmianach</span>
+          <a class="badge" href="../" title="Wróć do strony głównej">↩ Strona główna</a>
+        </div>
+      </section>
+
+      <section class="card tile" data-tags="pogoda weather">
+        <div class="cardHead">
+          <h2>Pogoda</h2>
+          <span class="pill" id="weatherCity">—</span>
+        </div>
+        <div class="weather">
+          <div class="temp" id="temp">—°</div>
+          <div class="weatherMeta">
+            <div><span class="muted">Opis:</span> <b id="wDesc">—</b></div>
+            <div><span class="muted">Odczuwalna:</span> <b id="feels">—</b></div>
+            <div><span class="muted">Wiatr:</span> <b id="wind">—</b></div>
+            <div><span class="muted">Opady:</span> <b id="rain">—</b></div>
+          </div>
+        </div>
+        <div class="muted small" style="margin-top:10px">Źródło: Open‑Meteo (bez klucza API). Możesz włączyć geolokalizację.</div>
+      </section>
+
+      <section class="card tile wide" data-tags="m365 azure admin panele linki">
+        <div class="cardHead">
+          <h2>Panele administracyjne</h2>
+          <span class="pill">M365 / Azure</span>
+        </div>
+        <div class="tileGrid" id="tiles"></div>
+        <div class="muted small" style="margin-top:10px">Edytuj listę linków w <code>m365/index.html</code> (sekcja <code>LINKS</code>).</div>
+      </section>
+
+      <section class="card tile wide" data-tags="security compliance defender purview">
+        <div class="cardHead">
+          <h2>Bezpieczeństwo i zgodność</h2>
+          <span class="pill">Defender / Purview</span>
+        </div>
+        <div class="tileGrid" id="tilesSec"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const TZ = "Europe/Warsaw";
+
+    // Domyślna lokalizacja (zmień albo pozwól na geolokalizację)
+    const DEFAULT_LOCATION = { name: "Warszawa", lat: 52.2297, lon: 21.0122 };
+
+    // Linki (główne)
+    const LINKS = [
+      { title: "Microsoft 365 Admin Center", desc: "Główne centrum administracyjne", url: "https://admin.microsoft.com/", tags:"m365 admin", icon:"grid" },
+      { title: "Microsoft Entra Admin Center", desc: "Identity, role, CA, aplikacje", url: "https://entra.microsoft.com/", tags:"entra aad identity", icon:"id" },
+      { title: "Azure Portal", desc: "Zasoby, subskrypcje, billing", url: "https://portal.azure.com/", tags:"azure portal", icon:"cloud" },
+      { title: "Intune Admin Center", desc: "Urządzenia, polityki, aplikacje", url: "https://intune.microsoft.com/", tags:"intune endpoint", icon:"device" },
+      { title: "Exchange Admin Center", desc: "Poczta, transport, konektory", url: "https://admin.exchange.microsoft.com/", tags:"exchange eac", icon:"mail" },
+      { title: "Teams Admin Center", desc: "Polityki i konfiguracja Teams", url: "https://admin.teams.microsoft.com/", tags:"teams", icon:"chat" },
+      { title: "SharePoint Admin Center", desc: "Sites, sharing, storage", url: "https://admin.microsoft.com/sharepoint", tags:"sharepoint", icon:"share" },
+      { title: "Power Platform Admin", desc: "Środowiska, DLP, governance", url: "https://admin.powerplatform.microsoft.com/", tags:"power platform", icon:"bolt" },
+      { title: "Power BI Admin Portal", desc: "Tenant settings, capacity", url: "https://app.powerbi.com/admin-portal", tags:"power bi", icon:"chart" },
+    ];
+
+    // Bezpieczeństwo / compliance
+    const LINKS_SEC = [
+      { title: "Microsoft Defender Portal", desc: "Incydenty, alerty, urządzenia", url: "https://security.microsoft.com/", tags:"defender security", icon:"shield" },
+      { title: "Microsoft Purview (Compliance)", desc: "DLP, eDiscovery, retention", url: "https://compliance.microsoft.com/", tags:"purview compliance", icon:"law" },
+      { title: "Conditional Access (Entra)", desc: "Zasady CA", url: "https://entra.microsoft.com/#view/Microsoft_AAD_ConditionalAccess/ConditionalAccessBlade/~/Policies", tags:"conditional access", icon:"lock" },
+      { title: "Sign-in logs (Entra)", desc: "Logowania i diagnostyka", url: "https://entra.microsoft.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/SignIns", tags:"sign in logs", icon:"list" },
+      { title: "Defender for Cloud", desc: "Posture i rekomendacje w Azure", url: "https://portal.azure.com/#view/Microsoft_Azure_Security/SecurityMenuBlade/~/overview", tags:"defender for cloud", icon:"cloudshield" },
+    ];
+
+    const el = (id) => document.getElementById(id);
+    const fmt2 = (n) => (Number.isFinite(n) ? n.toFixed(1) : "—");
+
+    function setToday(locationName){
+      const d = new Date();
+      const dateLine = d.toLocaleDateString("pl-PL", { timeZone: TZ, weekday:"long", year:"numeric", month:"long", day:"numeric" });
+      el("todayLine").textContent = `${dateLine} • ${locationName}`;
+      el("datePretty").textContent = d.toLocaleDateString("pl-PL", { timeZone: TZ, year:"numeric", month:"2-digit", day:"2-digit" });
+    }
+
+    function tick(){
+      const d = new Date();
+      el("clock").textContent = d.toLocaleTimeString("pl-PL", { timeZone: TZ, hour:"2-digit", minute:"2-digit" });
+    }
+    tick(); setInterval(tick, 5000);
+
+    function weatherDesc(code){
+      const m = new Map([
+        [0,"Bezchmurnie"], [1,"Przeważnie bezchmurnie"], [2,"Częściowe zachmurzenie"], [3,"Pochmurno"],
+        [45,"Mgła"], [48,"Osadzająca mgła"],
+        [51,"Mżawka"], [53,"Mżawka"], [55,"Mżawka"],
+        [61,"Deszcz"], [63,"Deszcz"], [65,"Ulewa"],
+        [71,"Śnieg"], [73,"Śnieg"], [75,"Śnieg"],
+        [80,"Przelotne opady"], [81,"Przelotne opady"], [82,"Silne opady"],
+        [95,"Burza"], [96,"Burza (grad)"], [99,"Burza (silny grad)"],
+      ]);
+      return m.get(code) ?? `Kod: ${code ?? "—"}`;
+    }
+
+    async function fetchWeather(lat, lon){
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&current=temperature_2m,apparent_temperature,precipitation,wind_speed_10m,weather_code&timezone=${encodeURIComponent(TZ)}`;
+      const r = await fetch(url);
+      if(!r.ok) throw new Error(`Weather HTTP ${r.status}`);
+      const j = await r.json();
+      const c = j?.current;
+      return {
+        t: c?.temperature_2m,
+        feels: c?.apparent_temperature,
+        rain: c?.precipitation,
+        wind: c?.wind_speed_10m,
+        code: c?.weather_code,
+        time: c?.time
+      };
+    }
+
+    function iconSvg(name){
+      const common = 'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
+      switch(name){
+        case "grid": return `<svg class="icon" viewBox="0 0 24 24" ${common}><rect x="3" y="3" width="8" height="8" rx="2"></rect><rect x="13" y="3" width="8" height="8" rx="2"></rect><rect x="3" y="13" width="8" height="8" rx="2"></rect><rect x="13" y="13" width="8" height="8" rx="2"></rect></svg>`;
+        case "id": return `<svg class="icon" viewBox="0 0 24 24" ${common}><path d="M4 7h16v10H4z"></path><path d="M8 11h4"></path><path d="M8 15h6"></path><circle cx="16.5" cy="12" r="1.5"></circle></svg>`;
+        case "cloud": return `<svg class="icon" viewBox="0 0 24 24" ${common}><path d="M7 18a4 4 0 0 1 .6-8 5 5 0 0 1 9.7 1.5A3.5 3.5 0 0 1 18 18H7z"></path></svg>`;
+        case "device": return `<svg class="icon" viewBox="0 0 24 24" ${common}><rect x="7" y="3" width="10" height="18" rx="2"></rect><path d="M10 18h4"></path></svg>`;
+        case "mail": return `<svg class="icon" viewBox="0 0 24 24" ${common}><rect x="3" y="6" width="18" height="12" rx="2"></rect><path d="M3 8l9 6 9-6"></path></svg>`;
+        case "chat": return `<svg class="icon" viewBox="0 0 24 24" ${common}><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path></svg>`;
+        case "share": return `<svg class="icon" viewBox="0 0 24 24" ${common}><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><path d="M16 6l-4-4-4 4"></path><path d="M12 2v14"></path></svg>`;
+        case "bolt": return `<svg class="icon" viewBox="0 0 24 24" ${common}><path d="M13 2L3 14h7l-1 8 10-12h-7z"></path></svg>`;
+        case "chart": return `<svg class="icon" viewBox="0 0 24 24" ${common}><path d="M4 19V5"></path><path d="M4 19h16"></path><path d="M8 17v-5"></path><path d="M12 17V9"></path><path d="M16 17v-8"></path></svg>`;
+        case "shield": return `<svg class="icon" viewBox="0 0 24 24" ${common}><path d="M12 2l8 4v6c0 5-3.4 9.4-8 10-4.6-.6-8-5-8-10V6l8-4z"></path></svg>`;
+        case "law": return `<svg class="icon" viewBox="0 0 24 24" ${common}><path d="M14 3h7v7"></path><path d="M10 21H3v-7"></path><path d="M21 3l-7 7"></path><path d="M3 21l7-7"></path></svg>`;
+        case "lock": return `<svg class="icon" viewBox="0 0 24 24" ${common}><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>`;
+        case "list": return `<svg class="icon" viewBox="0 0 24 24" ${common}><path d="M8 6h13"></path><path d="M8 12h13"></path><path d="M8 18h13"></path><path d="M3 6h.01"></path><path d="M3 12h.01"></path><path d="M3 18h.01"></path></svg>`;
+        case "cloudshield": return `<svg class="icon" viewBox="0 0 24 24" ${common}><path d="M7 18a4 4 0 0 1 .6-8 5 5 0 0 1 9.7 1.5A3.5 3.5 0 0 1 18 18"></path><path d="M12 12l4 2v3c0 2-1.4 3.8-4 4-2.6-.2-4-2-4-4v-3l4-2z"></path></svg>`;
+        default: return `<svg class="icon" viewBox="0 0 24 24" ${common}><circle cx="12" cy="12" r="9"></circle></svg>`;
+      }
+    }
+
+    function renderLinks(list, rootId){
+      const root = el(rootId);
+      root.innerHTML = "";
+      list.forEach(item => {
+        const a = document.createElement("a");
+        a.className = "tileLink";
+        a.href = item.url;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.dataset.tags = `${item.title} ${item.desc} ${item.tags || ""}`.toLowerCase();
+        a.innerHTML = `
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            ${iconSvg(item.icon)}
+            <div>
+              <b>${item.title}</b>
+              <span>${item.desc}</span>
+            </div>
+          </div>
+          <em>↗</em>
+        `;
+        root.appendChild(a);
+      });
+    }
+
+    function setUpdateLine(txt){
+      el("lastUpdate").textContent = `Aktualizacja: ${txt}`;
+    }
+
+    async function refreshAll(loc){
+      el("weatherCity").textContent = loc.name;
+      el("loc").textContent = loc.name;
+      setToday(loc.name);
+
+      try{
+        const w = await fetchWeather(loc.lat, loc.lon);
+        el("temp").textContent = Number.isFinite(w.t) ? `${Math.round(w.t)}°` : "—°";
+        el("wDesc").textContent = weatherDesc(w.code);
+        el("feels").textContent = Number.isFinite(w.feels) ? `${Math.round(w.feels)}°` : "—";
+        el("wind").textContent = Number.isFinite(w.wind) ? `${fmt2(w.wind)} km/h` : "—";
+        el("rain").textContent = Number.isFinite(w.rain) ? `${fmt2(w.rain)} mm` : "—";
+        el("kpiWeather").textContent = Number.isFinite(w.t) ? `${Math.round(w.t)}° • ${weatherDesc(w.code)}` : "—";
+      }catch(e){
+        console.warn(e);
+        el("kpiWeather").textContent = "—";
+      }
+
+      setUpdateLine(new Date().toLocaleString("pl-PL", { timeZone: TZ }));
+    }
+
+    // Search
+    el("q").addEventListener("input", () => {
+      const q = el("q").value.trim().toLowerCase();
+      document.querySelectorAll(".tileLink").forEach(a => {
+        const t = (a.dataset.tags || "");
+        a.style.display = (!q || t.includes(q)) ? "" : "none";
+      });
+    });
+
+    el("refresh").addEventListener("click", () => refreshAll(currentLoc));
+
+    // Geolocation (optional)
+    let currentLoc = { ...DEFAULT_LOCATION };
+    renderLinks(LINKS, "tiles");
+    renderLinks(LINKS_SEC, "tilesSec");
+    refreshAll(currentLoc);
+
+    if (navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          currentLoc = { name: "Twoja lokalizacja", lat: pos.coords.latitude, lon: pos.coords.longitude };
+          refreshAll(currentLoc);
+          el("hint").className = "badge good";
+          el("hint").textContent = "Geolokalizacja włączona";
+        },
+        () => {
+          // ignore
+        },
+        { enableHighAccuracy:false, timeout: 2500, maximumAge: 10 * 60 * 1000 }
+      );
+    }
+  </script>
 </body>
 </html>
