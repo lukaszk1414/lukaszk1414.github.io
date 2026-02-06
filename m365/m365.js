@@ -1,0 +1,1 @@
+/* pełny JS dashboardu – logika daty, pogody i linków */
