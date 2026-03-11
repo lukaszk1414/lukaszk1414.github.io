@@ -5,7 +5,7 @@ const $ = (sel) => document.querySelector(sel);
 function pad2(n){ return String(n).padStart(2,"0"); }
 
 function formatPLDate(d){
-  const days = ["niedziela","poniedziałek","wtorek","środa","czwartek","piątek","sobota"];
+  const days   = ["niedziela","poniedziałek","wtorek","środa","czwartek","piątek","sobota"];
   const months = ["stycznia","lutego","marca","kwietnia","maja","czerwca","lipca","sierpnia","września","października","listopada","grudnia"];
   return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
@@ -25,10 +25,10 @@ function setTabs(){
   const tabs = document.querySelectorAll(".tab");
   tabs.forEach(btn => {
     btn.addEventListener("click", () => {
-      tabs.forEach(b=>b.classList.remove("active"));
+      tabs.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       const key = btn.dataset.tab;
-      document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+      document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
       $("#panel-" + key).classList.add("active");
     });
   });
@@ -45,6 +45,40 @@ function timeAgo(iso){
   if(diffMin < 60) return `${diffMin} min temu`;
   const h = Math.round(diffMin/60);
   return `${h} h temu`;
+}
+
+/* ========= audio visualizer ========= */
+
+let vizBars = [];
+let vizAnimId = null;
+let audioCtx = null;
+let analyser = null;
+let sourceNode = null;
+
+function buildViz(){
+  const wrap = $("#vizWrap");
+  wrap.innerHTML = "";
+  vizBars = [];
+  const N = 18;
+  const heights = [8,14,22,18,26,12,20,28,16,24,10,22,18,26,12,20,14,8];
+  for(let i = 0; i < N; i++){
+    const b = document.createElement("div");
+    b.className = "viz-bar";
+    b.style.setProperty("--h", heights[i] + "px");
+    b.style.setProperty("--d", (0.5 + Math.random() * 0.7).toFixed(2) + "s");
+    b.style.animationDelay = (i * 0.04).toFixed(2) + "s";
+    b.style.height = "3px";
+    wrap.appendChild(b);
+    vizBars.push(b);
+  }
+}
+
+function startViz(){
+  $("#vizWrap").classList.add("active");
+}
+
+function stopViz(){
+  $("#vizWrap").classList.remove("active");
 }
 
 /* ========= weather (Open‑Meteo) ========= */
@@ -65,52 +99,40 @@ async function loadWeather(){
   const data = await res.json();
 
   const c = data.current || {};
-  $("#temp").textContent = (c.temperature_2m ?? "—") + "°";
-  $("#apparent").textContent = (c.apparent_temperature ?? "—") + "°";
-  $("#wind").textContent = (c.wind_speed_10m ?? "—") + " km/h";
-  $("#precip").textContent = (c.precipitation ?? "—") + " mm";
+  $("#temp").textContent        = (c.temperature_2m ?? "—") + "°";
+  $("#apparent").textContent    = (c.apparent_temperature ?? "—") + "°";
+  $("#wind").textContent        = (c.wind_speed_10m ?? "—") + " km/h";
+  $("#precip").textContent      = (c.precipitation ?? "—") + " mm";
   $("#weatherDesc").textContent = weatherCodeToPL(c.weather_code);
   $("#weatherUpdated").textContent = timeAgo(c.time) || "—";
 }
 
 function weatherCodeToPL(code){
   const map = {
-    0:"bezchmurnie",
-    1:"głównie pogodnie",
-    2:"częściowe zachmurzenie",
-    3:"pochmurno",
-    45:"mgła",
-    48:"mgła osadzająca",
-    51:"mżawka",
-    53:"mżawka",
-    55:"mżawka",
-    61:"deszcz",
-    63:"deszcz",
-    65:"ulewa",
-    71:"śnieg",
-    73:"śnieg",
-    75:"intensywny śnieg",
-    80:"przelotny deszcz",
-    81:"przelotny deszcz",
-    82:"silny przelotny deszcz",
-    95:"burza"
+    0:"☀️ bezchmurnie", 1:"🌤 głównie pogodnie", 2:"⛅ częściowe zachmurzenie",
+    3:"☁️ pochmurno", 45:"🌫 mgła", 48:"🌫 mgła osadzająca",
+    51:"🌦 mżawka", 53:"🌦 mżawka", 55:"🌦 mżawka",
+    61:"🌧 deszcz", 63:"🌧 deszcz", 65:"⛈ ulewa",
+    71:"🌨 śnieg", 73:"🌨 śnieg", 75:"❄️ intensywny śnieg",
+    80:"🌦 przelotny deszcz", 81:"🌦 przelotny deszcz", 82:"⛈ silny przelotny deszcz",
+    95:"⛈ burza"
   };
   return map[Number(code)] || "—";
 }
 
 /* ========= RSS news (proxy CORS) ========= */
 
-async function fetchRssItems(rssUrl, limit=8){
+async function fetchRssItems(rssUrl, limit=9){
   const proxied = "https://api.allorigins.win/raw?url=" + encodeURIComponent(rssUrl);
   const res = await fetch(proxied);
   if(!res.ok) throw new Error("RSS fetch failed");
-  const xml = await res.text();
-  const doc = new DOMParser().parseFromString(xml, "text/xml");
+  const xml  = await res.text();
+  const doc  = new DOMParser().parseFromString(xml, "text/xml");
   const items = [...doc.querySelectorAll("item")].slice(0, limit);
 
   return items.map(it => {
-    const title = it.querySelector("title")?.textContent?.trim();
-    const link = it.querySelector("link")?.textContent?.trim();
+    const title   = it.querySelector("title")?.textContent?.trim();
+    const link    = it.querySelector("link")?.textContent?.trim();
     const pubDate = it.querySelector("pubDate")?.textContent?.trim();
     return { title, link, pubDate };
   });
@@ -121,6 +143,7 @@ function renderList(listEl, items){
   for(const it of items){
     const li = document.createElement("li");
     li.className = "item";
+
     const a = document.createElement("a");
     a.href = it.link || "#";
     a.target = "_blank";
@@ -139,14 +162,11 @@ function renderList(listEl, items){
 
 async function loadNews(){
   const cfg = window.DASH_CONFIG;
-
-  const newsSources = cfg.rss.news ?? [];
+  const newsSources  = cfg.rss.news  ?? [];
   const sportSources = cfg.rss.sport ?? [];
-
-  const news = newsSources[0]?.url ? await fetchRssItems(newsSources[0].url, 10) : [];
-  const sport = sportSources[0]?.url ? await fetchRssItems(sportSources[0].url, 10) : [];
-
-  renderList($("#listNews"), news);
+  const news  = newsSources[0]?.url  ? await fetchRssItems(newsSources[0].url,  9) : [];
+  const sport = sportSources[0]?.url ? await fetchRssItems(sportSources[0].url, 9) : [];
+  renderList($("#listNews"),  news);
   renderList($("#listSport"), sport);
 }
 
@@ -158,11 +178,7 @@ async function nbpRate(code){
   if(!res.ok) throw new Error("NBP FX failed");
   const data = await res.json();
   const r = data?.rates?.[0];
-  return {
-    mid: r?.mid,
-    effectiveDate: r?.effectiveDate,
-    no: r?.no
-  };
+  return { mid: r?.mid, effectiveDate: r?.effectiveDate, no: r?.no };
 }
 
 async function nbpGold(){
@@ -180,12 +196,10 @@ async function stooqLastClose(symbol){
   const res = await fetch(proxied);
   if(!res.ok) throw new Error("Stooq failed");
   const csv = await res.text();
-
   const lines = csv.trim().split("\n");
-  const last = lines[lines.length - 1];
+  const last  = lines[lines.length - 1];
   const parts = last.split(",");
-  const close = Number(parts[4]);
-  return close;
+  return Number(parts[4]);
 }
 
 async function loadFxAndMetals(){
@@ -199,16 +213,15 @@ async function loadFxAndMetals(){
   $("#usdpln").textContent = usdpln ? usdpln.toFixed(4) : "—";
   $("#eurpln").textContent = eur.mid ? eur.mid.toFixed(4) : "—";
   $("#fxDate").textContent = usd.effectiveDate ? `Data: ${usd.effectiveDate}` : "—";
-  $("#fxNo").textContent = usd.no ? `Tabela: ${usd.no}` : "—";
+  $("#fxNo").textContent   = usd.no ? `Tabela: ${usd.no}` : "—";
 
-  $("#goldPlnG").textContent = (gold.cena != null) ? Number(gold.cena).toFixed(2) : "—";
-  $("#goldDate").textContent = gold.data ? `Data: ${gold.data}` : "—";
+  $("#goldPlnG").textContent  = (gold.cena != null) ? Number(gold.cena).toFixed(2) : "—";
+  $("#goldDate").textContent  = gold.data ? `Data: ${gold.data}` : "—";
 
-  try{
+  try {
     const xagUsd = await stooqLastClose("xagusd");
     if(xagUsd && usdpln){
-      const plnOz = xagUsd * usdpln;
-      $("#silverPlnOz").textContent = plnOz.toFixed(2);
+      $("#silverPlnOz").textContent = (xagUsd * usdpln).toFixed(2);
     } else {
       $("#silverPlnOz").textContent = "—";
     }
@@ -217,62 +230,50 @@ async function loadFxAndMetals(){
   }
 }
 
-/* ========= radio (Radio‑Browser / direct streams) ========= */
+/* ========= radio ========= */
 
 const audio = $("#audio");
 let currentStationId = null;
 let hls = null;
 
 function destroyHls(){
-  if(hls){
-    try{ hls.destroy(); } catch {}
-    hls = null;
-  }
+  if(hls){ try{ hls.destroy(); } catch {} hls = null; }
 }
 
 async function resolvePlaylistToUrl(playlistUrl){
-  // Supports simple .pls and .m3u playlists
   const res = await fetch(playlistUrl, { cache: "no-store" });
   if(!res.ok) throw new Error("Playlist fetch failed");
   const text = await res.text();
-
-  // .pls: File1=...
   const plsMatch = text.match(/File1\s*=\s*(.+)/i);
   if(plsMatch) return plsMatch[1].trim();
-
-  // .m3u: first non-comment line
   const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
   const m3uLine = lines.find(l => !l.startsWith("#"));
   if(m3uLine) return m3uLine;
-
   throw new Error("Unsupported playlist format");
 }
 
 async function playUrl(label, url){
   destroyHls();
-
   if(url.endsWith(".m3u8")){
     if(window.Hls && window.Hls.isSupported()){
       hls = new window.Hls({ enableWorker: true });
       hls.loadSource(url);
       hls.attachMedia(audio);
-      await new Promise((resolve, reject)=>{
-        const onError = (_event, data)=> reject(data?.details || data?.type || "HLS error");
-        hls.on(window.Hls.Events.MANIFEST_PARSED, ()=> resolve());
+      await new Promise((resolve, reject) => {
+        const onError = (_e, d) => reject(d?.details || d?.type || "HLS error");
+        hls.on(window.Hls.Events.MANIFEST_PARSED, () => resolve());
         hls.on(window.Hls.Events.ERROR, onError);
       });
       await audio.play();
       return;
     }
-    audio.src = url; // native HLS (Safari)
+    audio.src = url;
     await audio.play();
     return;
   }
-
   audio.src = url;
   await audio.play();
 }
-
 
 function setNowPlaying(text){
   $("#nowPlaying").textContent = text;
@@ -280,7 +281,8 @@ function setNowPlaying(text){
 
 function setAudioUiPlaying(isPlaying){
   $("#btnToggle").disabled = !currentStationId;
-  $("#btnToggle").textContent = isPlaying ? "⏸ Pauza" : "▶️ Wznów";
+  $("#btnToggle").textContent = isPlaying ? "⏸ Pauza" : "▶ Wznów";
+  if(isPlaying) startViz(); else stopViz();
 }
 
 async function radioBrowserPickServer(){
@@ -298,7 +300,6 @@ async function radioBrowserSearch(serverBase, name, countrycode){
     `?name=${encodeURIComponent(name)}` +
     (countrycode ? `&countrycode=${encodeURIComponent(countrycode)}` : "") +
     `&hidebroken=true&limit=10`;
-
   const res = await fetch(url);
   if(!res.ok) throw new Error("RadioBrowser search failed");
   return await res.json();
@@ -306,24 +307,20 @@ async function radioBrowserSearch(serverBase, name, countrycode){
 
 function chooseBestStation(results, label){
   if(!Array.isArray(results) || results.length === 0) return null;
-
-  const normalized = (s)=> safeText(s).toLowerCase();
+  const normalized = s => safeText(s).toLowerCase();
   const target = normalized(label);
-
   const scored = results.map(r => {
-    const name = normalized(r.name);
-    let score = 0;
-    const url = safeText(r.url_resolved || r.url || "");
-    const isHttps = url.startsWith("https://");
-    if(!isHttps) score -= 50; else score += 8;
+    const name  = normalized(r.name);
+    const url   = safeText(r.url_resolved || r.url || "");
+    let score   = 0;
+    if(!url.startsWith("https://")) score -= 50; else score += 8;
     if(name.includes(target) || target.includes(name)) score += 6;
-    if(r.url_resolved) score += 4;
-    if((r.bitrate ?? 0) >= 64) score += 2;
+    if(r.url_resolved)          score += 4;
+    if((r.bitrate ?? 0) >= 64)  score += 2;
     if((r.bitrate ?? 0) >= 128) score += 1;
-    if(r.lastcheckok === 1) score += 2;
+    if(r.lastcheckok === 1)     score += 2;
     return { r, score };
-  }).sort((a,b)=> b.score - a.score);
-
+  }).sort((a,b) => b.score - a.score);
   return scored[0]?.r || null;
 }
 
@@ -334,6 +331,7 @@ function createStationCard(st){
 
   const left = document.createElement("div");
   left.className = "left";
+
   const name = document.createElement("div");
   name.className = "name";
   name.textContent = st.label;
@@ -363,16 +361,14 @@ function markActive(sid){
 }
 
 async function playStation(sid, label, url){
-  try{
+  try {
     currentStationId = sid;
     markActive(sid);
-
     await playUrl(label, url);
-
-    setNowPlaying(`Gra: ${label}`);
+    setNowPlaying(`▶ ${label}`);
     setAudioUiPlaying(true);
   } catch {
-    setNowPlaying(`Nie udało się odtworzyć: ${label}`);
+    setNowPlaying(`⚠ Nie udało się: ${label}`);
     setAudioUiPlaying(false);
   }
 }
@@ -391,7 +387,7 @@ function stopRadio(){
 function toggleRadio(){
   if(!currentStationId) return;
   if(audio.paused){
-    audio.play().then(()=>setAudioUiPlaying(true)).catch(()=>setAudioUiPlaying(false));
+    audio.play().then(() => setAudioUiPlaying(true)).catch(() => setAudioUiPlaying(false));
   } else {
     audio.pause();
     setAudioUiPlaying(false);
@@ -405,7 +401,7 @@ async function loadStations(){
 
   const serverBase = await radioBrowserPickServer();
 
-  const targets = cfg.stations.map((s, idx)=>({
+  const targets = cfg.stations.map((s, idx) => ({
     sid: `st_${idx}`,
     label: s.label,
     query: s.query,
@@ -423,35 +419,31 @@ async function loadStations(){
       pickedUrl = t.directUrl;
       hint = "bezpośredni stream";
     } else if(t.playlistUrl){
-      try{
+      try {
         pickedUrl = await resolvePlaylistToUrl(t.playlistUrl);
-        hint = "playlista (.pls/.m3u)";
-      } catch {
-        // ignore
-      }
+        hint = "playlista";
+      } catch {}
     }
 
     if(!pickedUrl && t.fallbackUrl){
       pickedUrl = t.fallbackUrl;
-      hint = "fallback (bezpośredni stream)";
+      hint = "fallback";
     }
 
-    try{
+    try {
       const results = await radioBrowserSearch(serverBase, t.query, t.countrycode);
       const best = chooseBestStation(results, t.label);
-      if(best?.url_resolved && safeText(best.url_resolved).startsWith('https://')){
+      if(best?.url_resolved && safeText(best.url_resolved).startsWith("https://")){
         pickedUrl = best.url_resolved;
-        hint = `${safeText(best.codec || "audio")} • ${best.bitrate ? best.bitrate + " kbps" : "?"}`;
+        hint = `${safeText(best.codec || "audio")} · ${best.bitrate ? best.bitrate + " kbps" : "?"}`;
       }
-    } catch {
-      // fallback
-    }
+    } catch {}
 
     const st = {
       sid: t.sid,
       label: t.label,
       url: pickedUrl || "",
-      sourceHint: pickedUrl ? hint : "brak URL (kliknij ponownie później)"
+      sourceHint: pickedUrl ? hint : "brak URL"
     };
 
     const card = createStationCard(st);
@@ -487,17 +479,18 @@ function loadQuicklinks(){
 
 function wireUI(){
   setTabs();
+  buildViz();
 
   $("#btnStop").addEventListener("click", stopRadio);
   $("#btnToggle").addEventListener("click", toggleRadio);
 
-  $("#vol").addEventListener("input", (e)=>{
+  $("#vol").addEventListener("input", e => {
     audio.volume = Number(e.target.value);
   });
   audio.volume = Number($("#vol").value);
 
-  audio.addEventListener("play", ()=> setAudioUiPlaying(true));
-  audio.addEventListener("pause", ()=> setAudioUiPlaying(false));
+  audio.addEventListener("play",  () => setAudioUiPlaying(true));
+  audio.addEventListener("pause", () => setAudioUiPlaying(false));
 }
 
 async function main(){
@@ -515,12 +508,12 @@ async function main(){
     loadStations()
   ]);
 
-  setInterval(()=> loadWeather().catch(()=>{}), 10 * 60 * 1000);
-  setInterval(()=> loadNews().catch(()=>{}), 20 * 60 * 1000);
-  setInterval(()=> loadFxAndMetals().catch(()=>{}), 60 * 60 * 1000);
+  setInterval(() => loadWeather().catch(()=>{}),      10 * 60 * 1000);
+  setInterval(() => loadNews().catch(()=>{}),         20 * 60 * 1000);
+  setInterval(() => loadFxAndMetals().catch(()=>{}),  60 * 60 * 1000);
 }
 
-main().catch(err=>{
+main().catch(err => {
   $("#subtitle").textContent = "Wystąpił błąd ładowania danych.";
   console.error(err);
 });
