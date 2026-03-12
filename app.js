@@ -570,18 +570,17 @@ function loadQuicklinks(){
 /* ─── GRIDSTACK ──────────────────────────────────────── */
 const LS_KEY='dash_layout_v4', LS_HIDDEN='dash_hidden_v4';
 const DEFAULT_LAYOUT=[
-  {id:'weather', x:0,  y:0,  w:3,  h:3},
-  {id:'forecast',x:3,  y:0,  w:5,  h:3},
-  {id:'aqi',     x:8,  y:0,  w:4,  h:3},
-  {id:'quote',   x:0,  y:3,  w:4,  h:2},
-  {id:'todo',    x:4,  y:3,  w:4,  h:4},
-  {id:'commute', x:8,  y:3,  w:4,  h:4},
-  {id:'fx',      x:0,  y:5,  w:3,  h:2},
-  {id:'metals',  x:3,  y:5,  w:3,  h:2},
-  {id:'fuel',    x:6,  y:5,  w:6,  h:2},
-  {id:'radio',   x:0,  y:7,  w:4,  h:4},
-  {id:'links',   x:4,  y:7,  w:4,  h:4},
-  {id:'news',    x:8,  y:7,  w:4,  h:4},
+  {id:'weather', x:0,  y:0, w:3, h:4},
+  {id:'forecast',x:3,  y:0, w:5, h:4},
+  {id:'aqi',     x:8,  y:0, w:2, h:4},
+  {id:'quote',   x:10, y:0, w:2, h:4},
+  {id:'todo',    x:0,  y:4, w:3, h:4},
+  {id:'fx',      x:3,  y:4, w:3, h:4},
+  {id:'metals',  x:6,  y:4, w:3, h:4},
+  {id:'fuel',    x:9,  y:4, w:3, h:4},
+  {id:'radio',   x:0,  y:8, w:4, h:4},
+  {id:'links',   x:4,  y:8, w:4, h:4},
+  {id:'news',    x:8,  y:8, w:4, h:4},
 ];
 
 let grid;
@@ -652,7 +651,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   loadAqi().catch(e=>{ console.warn('AQI:',e); const b=$('#aqiBody'); if(b) b.innerHTML='<div class="loading-msg">⚠ Brak danych GIOŚ</div>'; });
   loadQuote().catch(e=>console.warn('Cytat:',e));
   initTodo();
-  initCommute();
   loadFuel().catch(e=>console.warn('Paliwo:',e));
   loadNews().catch(e=>console.warn('Newsy:',e));
   loadFxAndMetals().catch(e=>console.warn('Kursy:',e));

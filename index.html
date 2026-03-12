@@ -32,14 +32,13 @@
       <button class="vis-btn active" data-widget="weather">🌤 Pogoda</button>
       <button class="vis-btn active" data-widget="forecast">📅 Prognoza</button>
       <button class="vis-btn active" data-widget="aqi">🌿 Powietrze</button>
-      <button class="vis-btn active" data-widget="radio">📻 Radio</button>
-      <button class="vis-btn active" data-widget="links">🔗 Skróty</button>
+      <button class="vis-btn active" data-widget="quote">💬 Cytat</button>
+      <button class="vis-btn active" data-widget="todo">✅ ToDo</button>
       <button class="vis-btn active" data-widget="fx">💱 Waluty</button>
       <button class="vis-btn active" data-widget="metals">🥇 Kruszce</button>
-      <button class="vis-btn active" data-widget="todo">✅ ToDo</button>
-      <button class="vis-btn active" data-widget="commute">🚗 Trasa</button>
       <button class="vis-btn active" data-widget="fuel">⛽ Paliwo</button>
-      <button class="vis-btn active" data-widget="quote">💬 Cytat</button>
+      <button class="vis-btn active" data-widget="radio">📻 Radio</button>
+      <button class="vis-btn active" data-widget="links">🔗 Skróty</button>
       <button class="vis-btn active" data-widget="news">📰 Newsy</button>
       <button class="vis-btn-reset" id="resetLayout">↺ Reset</button>
     </div>
@@ -55,8 +54,11 @@
 <main class="grid-wrap">
 <div class="grid-stack" id="grid">
 
-  <!-- POGODA bieżąca: 3×3 -->
-  <div class="grid-stack-item" data-widget="weather" gs-x="0" gs-y="0" gs-w="3" gs-h="3" gs-min-w="2" gs-min-h="3">
+  <!-- ══ RZĄD 1: Pogoda 3 | Prognoza 5 | AQI 2 | Cytat 2 ══ -->
+
+  <!-- POGODA: x=0 y=0 w=3 h=4 -->
+  <div class="grid-stack-item" data-widget="weather"
+       gs-x="0" gs-y="0" gs-w="3" gs-h="4" gs-min-w="2" gs-min-h="3">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
@@ -77,8 +79,9 @@
     </div>
   </div>
 
-  <!-- PROGNOZA 7-dniowa: 5×3 -->
-  <div class="grid-stack-item" data-widget="forecast" gs-x="3" gs-y="0" gs-w="5" gs-h="3" gs-min-w="3" gs-min-h="2">
+  <!-- PROGNOZA 7 dni: x=3 y=0 w=5 h=4 -->
+  <div class="grid-stack-item" data-widget="forecast"
+       gs-x="3" gs-y="0" gs-w="5" gs-h="4" gs-min-w="3" gs-min-h="3">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
@@ -92,12 +95,13 @@
     </div>
   </div>
 
-  <!-- JAKOŚĆ POWIETRZA: 4×3 -->
-  <div class="grid-stack-item" data-widget="aqi" gs-x="8" gs-y="0" gs-w="4" gs-h="3" gs-min-w="2" gs-min-h="2">
+  <!-- AQI: x=8 y=0 w=2 h=4 -->
+  <div class="grid-stack-item" data-widget="aqi"
+       gs-x="8" gs-y="0" gs-w="2" gs-h="4" gs-min-w="2" gs-min-h="3">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
-        <span class="card-label">Jakość powietrza</span>
+        <span class="card-label">Powietrze</span>
         <span class="pill">GIOŚ</span>
         <button class="card-hide-btn" data-widget="aqi">✕</button>
       </div>
@@ -107,8 +111,9 @@
     </div>
   </div>
 
-  <!-- CYTAT DNIA: 4×2 -->
-  <div class="grid-stack-item" data-widget="quote" gs-x="0" gs-y="3" gs-w="4" gs-h="2" gs-min-w="2" gs-min-h="2">
+  <!-- CYTAT: x=10 y=0 w=2 h=4 -->
+  <div class="grid-stack-item" data-widget="quote"
+       gs-x="10" gs-y="0" gs-w="2" gs-h="4" gs-min-w="2" gs-min-h="2">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
@@ -123,8 +128,11 @@
     </div>
   </div>
 
-  <!-- TODO: 4×4 -->
-  <div class="grid-stack-item" data-widget="todo" gs-x="4" gs-y="3" gs-w="4" gs-h="4" gs-min-w="2" gs-min-h="3">
+  <!-- ══ RZĄD 2: ToDo 3 | Waluty 3 | Kruszce 3 | Paliwo 3 ══ -->
+
+  <!-- TODO: x=0 y=4 w=3 h=4 -->
+  <div class="grid-stack-item" data-widget="todo"
+       gs-x="0" gs-y="4" gs-w="3" gs-h="4" gs-min-w="2" gs-min-h="3">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
@@ -144,35 +152,9 @@
     </div>
   </div>
 
-  <!-- TRASA DO PRACY: 4×4 -->
-  <div class="grid-stack-item" data-widget="commute" gs-x="8" gs-y="3" gs-w="4" gs-h="4" gs-min-w="3" gs-min-h="3">
-    <div class="grid-stack-item-content card">
-      <div class="card-head">
-        <span class="drag-handle">⠿</span>
-        <span class="card-label">Trasa do pracy</span>
-        <span class="pill">Google Maps</span>
-        <button class="card-hide-btn" data-widget="commute">✕</button>
-      </div>
-      <div class="commute-setup" id="commuteSetup">
-        <div class="commute-field">
-          <label class="commute-label">📍 Skąd</label>
-          <input class="commute-input" id="commuteOrigin" type="text" placeholder="ul. Domowa 1, Warszawa"/>
-        </div>
-        <div class="commute-field">
-          <label class="commute-label">🏢 Dokąd</label>
-          <input class="commute-input" id="commuteDestination" type="text" placeholder="ul. Biurowa 5, Warszawa"/>
-        </div>
-        <button class="commute-save-btn" id="commuteSave">Pokaż trasę →</button>
-      </div>
-      <div class="commute-map-wrap" id="commuteMapWrap" style="display:none">
-        <iframe id="commuteFrame" class="commute-iframe" frameborder="0" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
-        <button class="commute-change-btn" id="commuteChange">✎ Zmień trasę</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- KURSY WALUT: 3×2 -->
-  <div class="grid-stack-item" data-widget="fx" gs-x="0" gs-y="5" gs-w="3" gs-h="2" gs-min-w="2" gs-min-h="2">
+  <!-- KURSY WALUT: x=3 y=4 w=3 h=4 -->
+  <div class="grid-stack-item" data-widget="fx"
+       gs-x="3" gs-y="4" gs-w="3" gs-h="4" gs-min-w="2" gs-min-h="2">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
@@ -196,8 +178,9 @@
     </div>
   </div>
 
-  <!-- KRUSZCE: 3×2 -->
-  <div class="grid-stack-item" data-widget="metals" gs-x="3" gs-y="5" gs-w="3" gs-h="2" gs-min-w="2" gs-min-h="2">
+  <!-- KRUSZCE: x=6 y=4 w=3 h=4 -->
+  <div class="grid-stack-item" data-widget="metals"
+       gs-x="6" gs-y="4" gs-w="3" gs-h="4" gs-min-w="2" gs-min-h="2">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
@@ -226,8 +209,9 @@
     </div>
   </div>
 
-  <!-- CENY PALIW: 6×2 -->
-  <div class="grid-stack-item" data-widget="fuel" gs-x="6" gs-y="5" gs-w="6" gs-h="2" gs-min-w="3" gs-min-h="2">
+  <!-- CENY PALIW: x=9 y=4 w=3 h=4 -->
+  <div class="grid-stack-item" data-widget="fuel"
+       gs-x="9" gs-y="4" gs-w="3" gs-h="4" gs-min-w="2" gs-min-h="2">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
@@ -241,8 +225,11 @@
     </div>
   </div>
 
-  <!-- RADIO: 4×4 -->
-  <div class="grid-stack-item" data-widget="radio" gs-x="0" gs-y="7" gs-w="4" gs-h="4" gs-min-w="3" gs-min-h="3">
+  <!-- ══ RZĄD 3: Radio 4 | Skróty 4 | Newsy 4 ══ -->
+
+  <!-- RADIO: x=0 y=8 w=4 h=4 -->
+  <div class="grid-stack-item" data-widget="radio"
+       gs-x="0" gs-y="8" gs-w="4" gs-h="4" gs-min-w="3" gs-min-h="3">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
@@ -265,8 +252,9 @@
     </div>
   </div>
 
-  <!-- SKRÓTY: 4×4 -->
-  <div class="grid-stack-item" data-widget="links" gs-x="4" gs-y="7" gs-w="4" gs-h="4" gs-min-w="2" gs-min-h="2">
+  <!-- SKRÓTY: x=4 y=8 w=4 h=4 -->
+  <div class="grid-stack-item" data-widget="links"
+       gs-x="4" gs-y="8" gs-w="4" gs-h="4" gs-min-w="2" gs-min-h="2">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
@@ -278,15 +266,16 @@
     </div>
   </div>
 
-  <!-- NEWSY: 4×4 -->
-  <div class="grid-stack-item" data-widget="news" gs-x="8" gs-y="7" gs-w="4" gs-h="4" gs-min-w="3" gs-min-h="3">
+  <!-- NEWSY: x=8 y=8 w=4 h=4 -->
+  <div class="grid-stack-item" data-widget="news"
+       gs-x="8" gs-y="8" gs-w="4" gs-h="4" gs-min-w="3" gs-min-h="3">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
         <span class="card-label">Newsy</span>
         <div class="tabs" role="tablist">
           <button class="tab active" data-tab="sport">Sport</button>
-          <button class="tab" data-tab="news">Wiadomości</button>
+          <button class="tab" data-tab="news">Wiadom.</button>
         </div>
         <button class="card-hide-btn" data-widget="news">✕</button>
       </div>
