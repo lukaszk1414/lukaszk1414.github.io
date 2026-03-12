@@ -4,212 +4,309 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Start • Dashboard</title>
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- GridStack -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack.min.css"/>
-
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
 
-  <!-- ═══ TOPBAR ═══════════════════════════════════════════ -->
-  <header class="topbar">
-    <div class="brand">
-      <div class="dot"></div>
-      <div>
-        <div class="brand-title">Dashboard</div>
-        <div class="brand-sub" id="subtitle">Ładowanie…</div>
+<!-- ═══ TOPBAR ════════════════════════════════════════════ -->
+<header class="topbar">
+  <div class="brand">
+    <div class="dot"></div>
+    <div>
+      <div class="brand-title">Dashboard</div>
+      <div class="brand-sub" id="subtitle">Ładowanie…</div>
+    </div>
+  </div>
+
+  <div class="topbar-center">
+    <button class="edit-toggle" id="editToggle">
+      <span class="edit-icon">✦</span>
+      <span class="edit-label">Edytuj układ</span>
+    </button>
+    <div class="visibility-panel" id="visibilityPanel">
+      <span class="vis-title">Moduły:</span>
+      <button class="vis-btn active" data-widget="weather">🌤 Pogoda</button>
+      <button class="vis-btn active" data-widget="forecast">📅 Prognoza</button>
+      <button class="vis-btn active" data-widget="aqi">🌿 Powietrze</button>
+      <button class="vis-btn active" data-widget="radio">📻 Radio</button>
+      <button class="vis-btn active" data-widget="links">🔗 Skróty</button>
+      <button class="vis-btn active" data-widget="fx">💱 Waluty</button>
+      <button class="vis-btn active" data-widget="metals">🥇 Kruszce</button>
+      <button class="vis-btn active" data-widget="todo">✅ ToDo</button>
+      <button class="vis-btn active" data-widget="commute">🚗 Trasa</button>
+      <button class="vis-btn active" data-widget="fuel">⛽ Paliwo</button>
+      <button class="vis-btn active" data-widget="quote">💬 Cytat</button>
+      <button class="vis-btn active" data-widget="news">📰 Newsy</button>
+      <button class="vis-btn-reset" id="resetLayout">↺ Reset</button>
+    </div>
+  </div>
+
+  <div class="clock-block">
+    <div class="time" id="time">--:--</div>
+    <div class="date" id="date">ładowanie…</div>
+  </div>
+</header>
+
+<!-- ═══ GRID ══════════════════════════════════════════════ -->
+<main class="grid-wrap">
+<div class="grid-stack" id="grid">
+
+  <!-- POGODA bieżąca: 3×3 -->
+  <div class="grid-stack-item" data-widget="weather" gs-x="0" gs-y="0" gs-w="3" gs-h="3" gs-min-w="2" gs-min-h="3">
+    <div class="grid-stack-item-content card">
+      <div class="card-head">
+        <span class="drag-handle">⠿</span>
+        <span class="card-label">Pogoda</span>
+        <span class="pill" id="weatherPlace">—</span>
+        <button class="card-hide-btn" data-widget="weather">✕</button>
+      </div>
+      <div class="weather-body">
+        <div class="temp" id="temp">—°</div>
+        <div class="weather-desc" id="weatherDesc">—</div>
+        <div class="weather-grid">
+          <div class="wkv"><div class="wkv-label">Odczuwalna</div><div class="wkv-val" id="apparent">—</div></div>
+          <div class="wkv"><div class="wkv-label">Wiatr</div><div class="wkv-val" id="wind">—</div></div>
+          <div class="wkv"><div class="wkv-label">Opady</div><div class="wkv-val" id="precip">—</div></div>
+          <div class="wkv"><div class="wkv-label">Aktualizacja</div><div class="wkv-val" id="weatherUpdated">—</div></div>
+        </div>
       </div>
     </div>
+  </div>
 
-    <div class="topbar-center">
-      <!-- Tryb edycji -->
-      <button class="edit-toggle" id="editToggle" title="Tryb edycji">
-        <span class="edit-icon">✦</span>
-        <span class="edit-label">Edytuj układ</span>
-      </button>
-
-      <!-- Panel widoczności (widoczny tylko w trybie edycji) -->
-      <div class="visibility-panel" id="visibilityPanel">
-        <span class="vis-title">Moduły:</span>
-        <button class="vis-btn active" data-widget="weather">🌤 Pogoda</button>
-        <button class="vis-btn active" data-widget="radio">📻 Radio</button>
-        <button class="vis-btn active" data-widget="links">🔗 Skróty</button>
-        <button class="vis-btn active" data-widget="fx">💱 Waluty</button>
-        <button class="vis-btn active" data-widget="metals">🥇 Kruszce</button>
-        <button class="vis-btn active" data-widget="news">📰 Newsy</button>
-        <button class="vis-btn-reset" id="resetLayout" title="Przywróć domyślny układ">↺ Reset</button>
+  <!-- PROGNOZA 7-dniowa: 5×3 -->
+  <div class="grid-stack-item" data-widget="forecast" gs-x="3" gs-y="0" gs-w="5" gs-h="3" gs-min-w="3" gs-min-h="2">
+    <div class="grid-stack-item-content card">
+      <div class="card-head">
+        <span class="drag-handle">⠿</span>
+        <span class="card-label">Prognoza 7 dni</span>
+        <span class="pill">Open-Meteo</span>
+        <button class="card-hide-btn" data-widget="forecast">✕</button>
+      </div>
+      <div class="forecast-body" id="forecastBody">
+        <div class="loading-msg">Ładowanie…</div>
       </div>
     </div>
+  </div>
 
-    <div class="clock-block">
-      <div class="time" id="time">--:--</div>
-      <div class="date" id="date">ładowanie…</div>
+  <!-- JAKOŚĆ POWIETRZA: 4×3 -->
+  <div class="grid-stack-item" data-widget="aqi" gs-x="8" gs-y="0" gs-w="4" gs-h="3" gs-min-w="2" gs-min-h="2">
+    <div class="grid-stack-item-content card">
+      <div class="card-head">
+        <span class="drag-handle">⠿</span>
+        <span class="card-label">Jakość powietrza</span>
+        <span class="pill">GIOŚ</span>
+        <button class="card-hide-btn" data-widget="aqi">✕</button>
+      </div>
+      <div class="aqi-body" id="aqiBody">
+        <div class="loading-msg">Ładowanie…</div>
+      </div>
     </div>
-  </header>
+  </div>
 
-  <!-- ═══ GRID ══════════════════════════════════════════════ -->
-  <main class="grid-wrap">
-    <div class="grid-stack" id="grid">
+  <!-- CYTAT DNIA: 4×2 -->
+  <div class="grid-stack-item" data-widget="quote" gs-x="0" gs-y="3" gs-w="4" gs-h="2" gs-min-w="2" gs-min-h="2">
+    <div class="grid-stack-item-content card">
+      <div class="card-head">
+        <span class="drag-handle">⠿</span>
+        <span class="card-label">Cytat dnia</span>
+        <button class="btn-refresh-quote" id="refreshQuote" title="Nowy cytat">↻</button>
+        <button class="card-hide-btn" data-widget="quote">✕</button>
+      </div>
+      <div class="quote-body">
+        <div class="quote-text" id="quoteText">Ładowanie…</div>
+        <div class="quote-author" id="quoteAuthor"></div>
+      </div>
+    </div>
+  </div>
 
-      <!-- Pogoda: x=0 y=0 w=4 h=4 -->
-      <div class="grid-stack-item" data-widget="weather"
-           gs-x="0" gs-y="0" gs-w="4" gs-h="4" gs-min-w="2" gs-min-h="3">
-        <div class="grid-stack-item-content card">
-          <div class="card-head">
-            <span class="drag-handle">⠿</span>
-            <span class="card-label">Pogoda</span>
-            <span class="pill" id="weatherPlace">—</span>
-            <button class="card-hide-btn" data-widget="weather" title="Ukryj">✕</button>
+  <!-- TODO: 4×4 -->
+  <div class="grid-stack-item" data-widget="todo" gs-x="4" gs-y="3" gs-w="4" gs-h="4" gs-min-w="2" gs-min-h="3">
+    <div class="grid-stack-item-content card">
+      <div class="card-head">
+        <span class="drag-handle">⠿</span>
+        <span class="card-label">Lista zadań</span>
+        <span class="pill todo-count" id="todoCount">0</span>
+        <button class="card-hide-btn" data-widget="todo">✕</button>
+      </div>
+      <div class="todo-input-wrap">
+        <input class="todo-input" id="todoInput" type="text" placeholder="Dodaj zadanie… (Enter)"/>
+        <button class="todo-add-btn" id="todoAdd">+</button>
+      </div>
+      <ul class="todo-list" id="todoList"></ul>
+      <div class="todo-footer">
+        <span id="todoDone">0 ukończonych</span>
+        <button class="todo-clear-btn" id="todoClear">Wyczyść ukończone</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRASA DO PRACY: 4×4 -->
+  <div class="grid-stack-item" data-widget="commute" gs-x="8" gs-y="3" gs-w="4" gs-h="4" gs-min-w="3" gs-min-h="3">
+    <div class="grid-stack-item-content card">
+      <div class="card-head">
+        <span class="drag-handle">⠿</span>
+        <span class="card-label">Trasa do pracy</span>
+        <span class="pill">Google Maps</span>
+        <button class="card-hide-btn" data-widget="commute">✕</button>
+      </div>
+      <div class="commute-setup" id="commuteSetup">
+        <div class="commute-field">
+          <label class="commute-label">📍 Skąd</label>
+          <input class="commute-input" id="commuteOrigin" type="text" placeholder="ul. Domowa 1, Warszawa"/>
+        </div>
+        <div class="commute-field">
+          <label class="commute-label">🏢 Dokąd</label>
+          <input class="commute-input" id="commuteDestination" type="text" placeholder="ul. Biurowa 5, Warszawa"/>
+        </div>
+        <button class="commute-save-btn" id="commuteSave">Pokaż trasę →</button>
+      </div>
+      <div class="commute-map-wrap" id="commuteMapWrap" style="display:none">
+        <iframe id="commuteFrame" class="commute-iframe" frameborder="0" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <button class="commute-change-btn" id="commuteChange">✎ Zmień trasę</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- KURSY WALUT: 3×2 -->
+  <div class="grid-stack-item" data-widget="fx" gs-x="0" gs-y="5" gs-w="3" gs-h="2" gs-min-w="2" gs-min-h="2">
+    <div class="grid-stack-item-content card">
+      <div class="card-head">
+        <span class="drag-handle">⠿</span>
+        <span class="card-label">Kursy walut</span>
+        <span class="pill">NBP</span>
+        <button class="card-hide-btn" data-widget="fx">✕</button>
+      </div>
+      <div class="fx-body">
+        <div class="fx-item">
+          <div class="fx-pair">USD <span class="fx-sep">/</span> PLN</div>
+          <div class="fx-value" id="usdpln">—</div>
+          <div class="fx-hint" id="fxDate">—</div>
+        </div>
+        <div class="fx-divider"></div>
+        <div class="fx-item">
+          <div class="fx-pair">EUR <span class="fx-sep">/</span> PLN</div>
+          <div class="fx-value" id="eurpln">—</div>
+          <div class="fx-hint" id="fxNo">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KRUSZCE: 3×2 -->
+  <div class="grid-stack-item" data-widget="metals" gs-x="3" gs-y="5" gs-w="3" gs-h="2" gs-min-w="2" gs-min-h="2">
+    <div class="grid-stack-item-content card">
+      <div class="card-head">
+        <span class="drag-handle">⠿</span>
+        <span class="card-label">Kruszce</span>
+        <span class="pill">NBP · Stooq</span>
+        <button class="card-hide-btn" data-widget="metals">✕</button>
+      </div>
+      <div class="metals-body">
+        <div class="metal-item gold-item">
+          <div class="metal-symbol">Au</div>
+          <div class="metal-info">
+            <div class="metal-label">Złoto · PLN/g</div>
+            <div class="metal-value" id="goldPlnG">—</div>
+            <div class="metal-hint" id="goldDate">—</div>
           </div>
-          <div class="weather-body">
-            <div class="weather-top">
-              <div class="temp" id="temp">—°</div>
-              <div class="weather-right">
-                <div class="weather-desc" id="weatherDesc">—</div>
-                <div class="weather-grid">
-                  <div class="wkv"><div class="wkv-label">Odczuwalna</div><div class="wkv-val" id="apparent">—</div></div>
-                  <div class="wkv"><div class="wkv-label">Wiatr</div><div class="wkv-val" id="wind">—</div></div>
-                  <div class="wkv"><div class="wkv-label">Opady</div><div class="wkv-val" id="precip">—</div></div>
-                  <div class="wkv"><div class="wkv-label">Aktualizacja</div><div class="wkv-val" id="weatherUpdated">—</div></div>
-                </div>
-              </div>
-            </div>
+        </div>
+        <div class="metal-item silver-item">
+          <div class="metal-symbol">Ag</div>
+          <div class="metal-info">
+            <div class="metal-label">Srebro · PLN/oz</div>
+            <div class="metal-value" id="silverPlnOz">—</div>
+            <div class="metal-hint">USD→PLN</div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!-- Radio: x=4 y=0 w=4 h=4 -->
-      <div class="grid-stack-item" data-widget="radio"
-           gs-x="4" gs-y="0" gs-w="4" gs-h="4" gs-min-w="3" gs-min-h="3">
-        <div class="grid-stack-item-content card">
-          <div class="card-head">
-            <span class="drag-handle">⠿</span>
-            <span class="card-label">Radio</span>
-            <span class="pill" id="nowPlaying">Nie gra</span>
-            <button class="card-hide-btn" data-widget="radio" title="Ukryj">✕</button>
-          </div>
-          <div class="radio-controls">
-            <button class="btn" id="btnStop">⏹ Stop</button>
-            <button class="btn btn-accent" id="btnToggle" disabled>⏯ Pauza</button>
-            <div class="volume-wrap">
-              <span class="vol-label">VOL</span>
-              <input id="vol" type="range" min="0" max="1" step="0.01" value="0.7"/>
-            </div>
-          </div>
-          <div class="viz-wrap" id="vizWrap"></div>
-          <div class="stations" id="stations"></div>
-          <audio id="audio" preload="none"></audio>
-          <div class="smallnote">HLS / playlisty wspierane.</div>
+  <!-- CENY PALIW: 6×2 -->
+  <div class="grid-stack-item" data-widget="fuel" gs-x="6" gs-y="5" gs-w="6" gs-h="2" gs-min-w="3" gs-min-h="2">
+    <div class="grid-stack-item-content card">
+      <div class="card-head">
+        <span class="drag-handle">⠿</span>
+        <span class="card-label">Ceny paliw</span>
+        <span class="pill">e-petrol.pl</span>
+        <button class="card-hide-btn" data-widget="fuel">✕</button>
+      </div>
+      <div class="fuel-body" id="fuelBody">
+        <div class="loading-msg">Ładowanie…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RADIO: 4×4 -->
+  <div class="grid-stack-item" data-widget="radio" gs-x="0" gs-y="7" gs-w="4" gs-h="4" gs-min-w="3" gs-min-h="3">
+    <div class="grid-stack-item-content card">
+      <div class="card-head">
+        <span class="drag-handle">⠿</span>
+        <span class="card-label">Radio</span>
+        <span class="pill" id="nowPlaying">Nie gra</span>
+        <button class="card-hide-btn" data-widget="radio">✕</button>
+      </div>
+      <div class="radio-controls">
+        <button class="btn" id="btnStop">⏹ Stop</button>
+        <button class="btn btn-accent" id="btnToggle" disabled>⏯ Pauza</button>
+        <div class="volume-wrap">
+          <span class="vol-label">VOL</span>
+          <input id="vol" type="range" min="0" max="1" step="0.01" value="0.7"/>
         </div>
       </div>
+      <div class="viz-wrap" id="vizWrap"></div>
+      <div class="stations" id="stations"></div>
+      <audio id="audio" preload="none"></audio>
+      <div class="smallnote">HLS / playlisty wspierane.</div>
+    </div>
+  </div>
 
-      <!-- Skróty: x=8 y=0 w=4 h=4 -->
-      <div class="grid-stack-item" data-widget="links"
-           gs-x="8" gs-y="0" gs-w="4" gs-h="4" gs-min-w="2" gs-min-h="2">
-        <div class="grid-stack-item-content card">
-          <div class="card-head">
-            <span class="drag-handle">⠿</span>
-            <span class="card-label">Skróty</span>
-            <span class="pill">Ulubione</span>
-            <button class="card-hide-btn" data-widget="links" title="Ukryj">✕</button>
-          </div>
-          <div class="quicklinks" id="quicklinks"></div>
-        </div>
+  <!-- SKRÓTY: 4×4 -->
+  <div class="grid-stack-item" data-widget="links" gs-x="4" gs-y="7" gs-w="4" gs-h="4" gs-min-w="2" gs-min-h="2">
+    <div class="grid-stack-item-content card">
+      <div class="card-head">
+        <span class="drag-handle">⠿</span>
+        <span class="card-label">Skróty</span>
+        <span class="pill">Ulubione</span>
+        <button class="card-hide-btn" data-widget="links">✕</button>
       </div>
+      <div class="quicklinks" id="quicklinks"></div>
+    </div>
+  </div>
 
-      <!-- Kursy walut: x=0 y=4 w=6 h=3 -->
-      <div class="grid-stack-item" data-widget="fx"
-           gs-x="0" gs-y="4" gs-w="6" gs-h="3" gs-min-w="3" gs-min-h="2">
-        <div class="grid-stack-item-content card">
-          <div class="card-head">
-            <span class="drag-handle">⠿</span>
-            <span class="card-label">Kursy walut</span>
-            <span class="pill">NBP</span>
-            <button class="card-hide-btn" data-widget="fx" title="Ukryj">✕</button>
-          </div>
-          <div class="fx-body">
-            <div class="fx-item">
-              <div class="fx-pair">USD <span class="fx-sep">/</span> PLN</div>
-              <div class="fx-value" id="usdpln">—</div>
-              <div class="fx-hint" id="fxDate">—</div>
-            </div>
-            <div class="fx-divider"></div>
-            <div class="fx-item">
-              <div class="fx-pair">EUR <span class="fx-sep">/</span> PLN</div>
-              <div class="fx-value" id="eurpln">—</div>
-              <div class="fx-hint" id="fxNo">—</div>
-            </div>
-          </div>
+  <!-- NEWSY: 4×4 -->
+  <div class="grid-stack-item" data-widget="news" gs-x="8" gs-y="7" gs-w="4" gs-h="4" gs-min-w="3" gs-min-h="3">
+    <div class="grid-stack-item-content card">
+      <div class="card-head">
+        <span class="drag-handle">⠿</span>
+        <span class="card-label">Newsy</span>
+        <div class="tabs" role="tablist">
+          <button class="tab active" data-tab="sport">Sport</button>
+          <button class="tab" data-tab="news">Wiadomości</button>
         </div>
+        <button class="card-hide-btn" data-widget="news">✕</button>
       </div>
-
-      <!-- Kruszce: x=6 y=4 w=6 h=3 -->
-      <div class="grid-stack-item" data-widget="metals"
-           gs-x="6" gs-y="4" gs-w="6" gs-h="3" gs-min-w="3" gs-min-h="2">
-        <div class="grid-stack-item-content card">
-          <div class="card-head">
-            <span class="drag-handle">⠿</span>
-            <span class="card-label">Kruszce</span>
-            <span class="pill">NBP · Stooq</span>
-            <button class="card-hide-btn" data-widget="metals" title="Ukryj">✕</button>
-          </div>
-          <div class="metals-body">
-            <div class="metal-item gold-item">
-              <div class="metal-symbol">Au</div>
-              <div class="metal-info">
-                <div class="metal-label">Złoto · PLN/g</div>
-                <div class="metal-value" id="goldPlnG">—</div>
-                <div class="metal-hint" id="goldDate">—</div>
-              </div>
-            </div>
-            <div class="metal-item silver-item">
-              <div class="metal-symbol">Ag</div>
-              <div class="metal-info">
-                <div class="metal-label">Srebro · PLN/oz</div>
-                <div class="metal-value" id="silverPlnOz">—</div>
-                <div class="metal-hint">przeliczone USD→PLN</div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="tabpanels">
+        <div class="panel active" id="panel-sport"><ul class="list" id="listSport"></ul></div>
+        <div class="panel" id="panel-news"><ul class="list" id="listNews"></ul></div>
       </div>
+    </div>
+  </div>
 
-      <!-- Newsy: x=0 y=7 w=12 h=5 -->
-      <div class="grid-stack-item" data-widget="news"
-           gs-x="0" gs-y="7" gs-w="12" gs-h="5" gs-min-w="4" gs-min-h="3">
-        <div class="grid-stack-item-content card">
-          <div class="card-head">
-            <span class="drag-handle">⠿</span>
-            <span class="card-label">Newsy</span>
-            <div class="tabs" role="tablist">
-              <button class="tab active" data-tab="sport">Sport</button>
-              <button class="tab" data-tab="news">Wiadomości</button>
-            </div>
-            <button class="card-hide-btn" data-widget="news" title="Ukryj">✕</button>
-          </div>
-          <div class="tabpanels">
-            <div class="panel active" id="panel-sport"><ul class="list" id="listSport"></ul></div>
-            <div class="panel" id="panel-news"><ul class="list" id="listNews"></ul></div>
-          </div>
-        </div>
-      </div>
+</div><!-- /#grid -->
+</main>
 
-    </div><!-- /#grid -->
-  </main>
+<footer class="footer">
+  Tip: edytuj <code>config.js</code> · układ zapisywany automatycznie w przeglądarce
+</footer>
 
-  <footer class="footer">
-    Tip: edytuj <code>config.js</code> · układ zapisywany automatycznie w przeglądarce
-  </footer>
-
-  <script src="config.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack-all.js"></script>
-  <script src="app.js"></script>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack-all.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
