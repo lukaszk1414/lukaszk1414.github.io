@@ -31,11 +31,9 @@
       <span class="vis-title">Moduły:</span>
       <button class="vis-btn active" data-widget="weather">🌤 Pogoda</button>
       <button class="vis-btn active" data-widget="forecast">📅 Prognoza</button>
-      <button class="vis-btn active" data-widget="aqi">🌿 Powietrze</button>
       <button class="vis-btn active" data-widget="quote">💬 Cytat</button>
       <button class="vis-btn active" data-widget="todo">✅ ToDo</button>
-      <button class="vis-btn active" data-widget="fx">💱 Waluty</button>
-      <button class="vis-btn active" data-widget="metals">🥇 Kruszce</button>
+      <button class="vis-btn active" data-widget="finanse">💱 Finanse</button>
       <button class="vis-btn active" data-widget="fuel">⛽ Paliwo</button>
       <button class="vis-btn active" data-widget="radio">📻 Radio</button>
       <button class="vis-btn active" data-widget="links">🔗 Skróty</button>
@@ -54,11 +52,11 @@
 <main class="grid-wrap">
 <div class="grid-stack" id="grid">
 
-  <!-- ══ RZĄD 1: Pogoda 3 | Prognoza 5 | AQI 2 | Cytat 2 ══ -->
+  <!-- ══ RZĄD 1: Pogoda 4 | Prognoza 5 | Cytat 3 ══ -->
 
-  <!-- POGODA: x=0 y=0 w=3 h=4 -->
+  <!-- POGODA: x=0 y=0 w=4 h=5 -->
   <div class="grid-stack-item" data-widget="weather"
-       gs-x="0" gs-y="0" gs-w="3" gs-h="4" gs-min-w="2" gs-min-h="3">
+       gs-x="0" gs-y="0" gs-w="4" gs-h="5" gs-min-w="3" gs-min-h="4">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
@@ -79,9 +77,9 @@
     </div>
   </div>
 
-  <!-- PROGNOZA 7 dni: x=3 y=0 w=5 h=4 -->
+  <!-- PROGNOZA 7 dni: x=4 y=0 w=5 h=5 -->
   <div class="grid-stack-item" data-widget="forecast"
-       gs-x="3" gs-y="0" gs-w="5" gs-h="4" gs-min-w="3" gs-min-h="3">
+       gs-x="4" gs-y="0" gs-w="5" gs-h="5" gs-min-w="3" gs-min-h="3">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
@@ -95,25 +93,9 @@
     </div>
   </div>
 
-  <!-- AQI: x=8 y=0 w=2 h=4 -->
-  <div class="grid-stack-item" data-widget="aqi"
-       gs-x="8" gs-y="0" gs-w="2" gs-h="4" gs-min-w="2" gs-min-h="3">
-    <div class="grid-stack-item-content card">
-      <div class="card-head">
-        <span class="drag-handle">⠿</span>
-        <span class="card-label">Powietrze</span>
-        <span class="pill">GIOŚ</span>
-        <button class="card-hide-btn" data-widget="aqi">✕</button>
-      </div>
-      <div class="aqi-body" id="aqiBody">
-        <div class="loading-msg">Ładowanie…</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CYTAT: x=10 y=0 w=2 h=4 -->
+  <!-- CYTAT: x=9 y=0 w=3 h=5 -->
   <div class="grid-stack-item" data-widget="quote"
-       gs-x="10" gs-y="0" gs-w="2" gs-h="4" gs-min-w="2" gs-min-h="2">
+       gs-x="9" gs-y="0" gs-w="3" gs-h="5" gs-min-w="2" gs-min-h="3">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
@@ -128,11 +110,11 @@
     </div>
   </div>
 
-  <!-- ══ RZĄD 2: ToDo 3 | Waluty 3 | Kruszce 3 | Paliwo 3 ══ -->
+  <!-- ══ RZĄD 2: ToDo 3 | Finanse (waluty+Au) 3 | Paliwo 3 | Skróty 3 ══ -->
 
-  <!-- TODO: x=0 y=4 w=3 h=4 -->
+  <!-- TODO: x=0 y=5 w=3 h=5 -->
   <div class="grid-stack-item" data-widget="todo"
-       gs-x="0" gs-y="4" gs-w="3" gs-h="4" gs-min-w="2" gs-min-h="3">
+       gs-x="0" gs-y="5" gs-w="3" gs-h="5" gs-min-w="2" gs-min-h="4">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
@@ -141,7 +123,7 @@
         <button class="card-hide-btn" data-widget="todo">✕</button>
       </div>
       <div class="todo-input-wrap">
-        <input class="todo-input" id="todoInput" type="text" placeholder="Dodaj zadanie… (Enter)"/>
+        <input class="todo-input" id="todoInput" type="text" placeholder="Nowe zadanie… (Enter)"/>
         <button class="todo-add-btn" id="todoAdd">+</button>
       </div>
       <ul class="todo-list" id="todoList"></ul>
@@ -152,66 +134,39 @@
     </div>
   </div>
 
-  <!-- KURSY WALUT: x=3 y=4 w=3 h=4 -->
-  <div class="grid-stack-item" data-widget="fx"
-       gs-x="3" gs-y="4" gs-w="3" gs-h="4" gs-min-w="2" gs-min-h="2">
+  <!-- FINANSE (USD + EUR + Au): x=3 y=5 w=3 h=5 -->
+  <div class="grid-stack-item" data-widget="finanse"
+       gs-x="3" gs-y="5" gs-w="3" gs-h="5" gs-min-w="2" gs-min-h="4">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
-        <span class="card-label">Kursy walut</span>
-        <span class="pill">NBP</span>
-        <button class="card-hide-btn" data-widget="fx">✕</button>
-      </div>
-      <div class="fx-body">
-        <div class="fx-item">
-          <div class="fx-pair">USD <span class="fx-sep">/</span> PLN</div>
-          <div class="fx-value" id="usdpln">—</div>
-          <div class="fx-hint" id="fxDate">—</div>
-        </div>
-        <div class="fx-divider"></div>
-        <div class="fx-item">
-          <div class="fx-pair">EUR <span class="fx-sep">/</span> PLN</div>
-          <div class="fx-value" id="eurpln">—</div>
-          <div class="fx-hint" id="fxNo">—</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- KRUSZCE: x=6 y=4 w=3 h=4 -->
-  <div class="grid-stack-item" data-widget="metals"
-       gs-x="6" gs-y="4" gs-w="3" gs-h="4" gs-min-w="2" gs-min-h="2">
-    <div class="grid-stack-item-content card">
-      <div class="card-head">
-        <span class="drag-handle">⠿</span>
-        <span class="card-label">Kruszce</span>
+        <span class="card-label">Finanse</span>
         <span class="pill">NBP · Stooq</span>
-        <button class="card-hide-btn" data-widget="metals">✕</button>
+        <button class="card-hide-btn" data-widget="finanse">✕</button>
       </div>
-      <div class="metals-body">
-        <div class="metal-item gold-item">
-          <div class="metal-symbol">Au</div>
-          <div class="metal-info">
-            <div class="metal-label">Złoto · PLN/g</div>
-            <div class="metal-value" id="goldPlnG">—</div>
-            <div class="metal-hint" id="goldDate">—</div>
-          </div>
+      <div class="finanse-body">
+        <div class="fin-item">
+          <div class="fin-label">USD / PLN</div>
+          <div class="fin-value" id="usdpln">—</div>
+          <div class="fin-hint" id="fxDate">—</div>
         </div>
-        <div class="metal-item silver-item">
-          <div class="metal-symbol">Ag</div>
-          <div class="metal-info">
-            <div class="metal-label">Srebro · PLN/oz</div>
-            <div class="metal-value" id="silverPlnOz">—</div>
-            <div class="metal-hint">USD→PLN</div>
-          </div>
+        <div class="fin-item">
+          <div class="fin-label">EUR / PLN</div>
+          <div class="fin-value" id="eurpln">—</div>
+          <div class="fin-hint" id="fxNo">—</div>
+        </div>
+        <div class="fin-item fin-gold">
+          <div class="fin-label">Złoto Au · PLN/g</div>
+          <div class="fin-value gold-val" id="goldPlnG">—</div>
+          <div class="fin-hint" id="goldDate">—</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- CENY PALIW: x=9 y=4 w=3 h=4 -->
+  <!-- PALIWA: x=6 y=5 w=3 h=5 -->
   <div class="grid-stack-item" data-widget="fuel"
-       gs-x="9" gs-y="4" gs-w="3" gs-h="4" gs-min-w="2" gs-min-h="2">
+       gs-x="6" gs-y="5" gs-w="3" gs-h="5" gs-min-w="2" gs-min-h="4">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
@@ -225,11 +180,25 @@
     </div>
   </div>
 
-  <!-- ══ RZĄD 3: Radio 4 | Skróty 4 | Newsy 4 ══ -->
+  <!-- SKRÓTY: x=9 y=5 w=3 h=5 -->
+  <div class="grid-stack-item" data-widget="links"
+       gs-x="9" gs-y="5" gs-w="3" gs-h="5" gs-min-w="2" gs-min-h="2">
+    <div class="grid-stack-item-content card">
+      <div class="card-head">
+        <span class="drag-handle">⠿</span>
+        <span class="card-label">Skróty</span>
+        <span class="pill">Ulubione</span>
+        <button class="card-hide-btn" data-widget="links">✕</button>
+      </div>
+      <div class="quicklinks" id="quicklinks"></div>
+    </div>
+  </div>
 
-  <!-- RADIO: x=0 y=8 w=4 h=4 -->
+  <!-- ══ RZĄD 3: Radio 6 | Newsy 6 ══ -->
+
+  <!-- RADIO: x=0 y=10 w=6 h=5 -->
   <div class="grid-stack-item" data-widget="radio"
-       gs-x="0" gs-y="8" gs-w="4" gs-h="4" gs-min-w="3" gs-min-h="3">
+       gs-x="0" gs-y="10" gs-w="6" gs-h="5" gs-min-w="4" gs-min-h="4">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
@@ -248,34 +217,19 @@
       <div class="viz-wrap" id="vizWrap"></div>
       <div class="stations" id="stations"></div>
       <audio id="audio" preload="none"></audio>
-      <div class="smallnote">HLS / playlisty wspierane.</div>
     </div>
   </div>
 
-  <!-- SKRÓTY: x=4 y=8 w=4 h=4 -->
-  <div class="grid-stack-item" data-widget="links"
-       gs-x="4" gs-y="8" gs-w="4" gs-h="4" gs-min-w="2" gs-min-h="2">
-    <div class="grid-stack-item-content card">
-      <div class="card-head">
-        <span class="drag-handle">⠿</span>
-        <span class="card-label">Skróty</span>
-        <span class="pill">Ulubione</span>
-        <button class="card-hide-btn" data-widget="links">✕</button>
-      </div>
-      <div class="quicklinks" id="quicklinks"></div>
-    </div>
-  </div>
-
-  <!-- NEWSY: x=8 y=8 w=4 h=4 -->
+  <!-- NEWSY: x=6 y=10 w=6 h=5 -->
   <div class="grid-stack-item" data-widget="news"
-       gs-x="8" gs-y="8" gs-w="4" gs-h="4" gs-min-w="3" gs-min-h="3">
+       gs-x="6" gs-y="10" gs-w="6" gs-h="5" gs-min-w="3" gs-min-h="3">
     <div class="grid-stack-item-content card">
       <div class="card-head">
         <span class="drag-handle">⠿</span>
         <span class="card-label">Newsy</span>
         <div class="tabs" role="tablist">
           <button class="tab active" data-tab="sport">Sport</button>
-          <button class="tab" data-tab="news">Wiadom.</button>
+          <button class="tab" data-tab="news">Wiadomości</button>
         </div>
         <button class="card-hide-btn" data-widget="news">✕</button>
       </div>
@@ -286,7 +240,7 @@
     </div>
   </div>
 
-</div><!-- /#grid -->
+</div>
 </main>
 
 <footer class="footer">
